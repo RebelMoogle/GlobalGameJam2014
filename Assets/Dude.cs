@@ -17,10 +17,17 @@ public class Dude : MonoBehaviour
 	// Attacking stuff
 	private const float _attackDistance = 1.0f;
 
+    public enum faction
+    {
+        RED,
+        BLUE
+    }
+
     public enum action {
         IDLE,
         RUNNING_IN_CIRCLES,
-        MOVE_TOWARD_PLAYER
+        MOVE_TOWARD_PLAYER,
+        SWARM
     }
 
 	// There can only be one! (Or two?)?
@@ -28,6 +35,8 @@ public class Dude : MonoBehaviour
 
     // action if not a player
     public action InitialState = action.IDLE;
+    // faction the player belongs to
+    public faction Faction = faction.BLUE;
 
 	// move speed in units per second
 	public float _speed = 1.0f;
@@ -46,6 +55,7 @@ public class Dude : MonoBehaviour
         {
             player = this;
         }
+        setStyle();
 	}
 
 
@@ -65,6 +75,7 @@ public class Dude : MonoBehaviour
 				_input.MoveUp += OnMovementUp;
 				_input.MoveLeft += OnMovementLeft;
 				_input.MoveRight += OnMovementRight;
+                _input.KillAction += OnKillAction;
 			}
 		}
 	}
@@ -82,6 +93,9 @@ public class Dude : MonoBehaviour
                     break;
                 case action.MOVE_TOWARD_PLAYER:
                     MoveTowardsPlayer();
+                    break;
+                case action.SWARM:
+                    SwarmToFaction();
                     break;
             }
         }
@@ -126,6 +140,10 @@ public class Dude : MonoBehaviour
 		MoveTowards(target);
 		Debug.Log("Right InputRecieved!",this);
 	}
+
+    void OnKillAction(GameObject e)
+    {
+    }
 
 	void MoveTowards(Vector3 targetPosition)
 	{
@@ -194,8 +212,57 @@ public class Dude : MonoBehaviour
         }
     }
 
+    // swarming
+    void SwarmToFaction()
+    {
+        if (!_moving)
+        {
+            // basically just swarming to the closes faction
+            Vector3 closestAllyPosition = Vector3.zero;
+            // minimum distance before swarming
+            float closestAllyDist = 3f; 
+            foreach (var dude in _allDudes)
+            {
+                if (Faction == dude.Faction)
+                {
+                    var dist = Vector3.Distance(transform.position, dude.transform.position);
+                    if (closestAllyDist == -1f || dist < closestAllyDist)
+                    {
+                        closestAllyPosition = dude.transform.position;
+                    }
+                }
+            }
+            if (closestAllyPosition != Vector3.zero)
+            {
+                MoveTowards(closestAllyPosition);
+            }
+        }
+    }
+
     internal void OnReceivedAttack()
     {
         Destroy(gameObject);
+    }
+
+    void OnDestroy()
+    {
+        _allDudes.Remove(this);
+    }
+    // grab material applied
+    // material should just use a color 
+    // 
+
+    void setStyle()
+    {
+        Color objectColor = Color.white;
+        switch(Faction) {
+            case faction.BLUE:
+                objectColor = Color.blue;
+                break;
+            case faction.RED:
+                objectColor = Color.red;
+                break;
+        }
+        renderer.material.color = objectColor;
     }
 }
