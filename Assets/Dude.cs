@@ -87,7 +87,8 @@ public class Dude : MonoBehaviour
 		{
 			Debug.Log("[Dude] Weapon prefab not set on " + this.name + " ", this);
 		}
-		
+
+        setStyle();
 	}
 
 
