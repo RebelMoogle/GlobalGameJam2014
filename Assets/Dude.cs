@@ -17,9 +17,17 @@ public class Dude : MonoBehaviour
 	// Attacking stuff
 	private const float _attackDistance = 1.0f;
 
+    public enum action {
+        IDLE,
+        RUNNING_IN_CIRCLES,
+        MOVE_TOWARD_PLAYER
+    }
 
 	// There can only be one! (Or two?)?
 	public bool isPlayer;
+
+    // action if not a player
+    public action InitialState = action.IDLE;
 
 	// move speed in units per second
 	public float _speed = 1.0f;
@@ -65,6 +73,18 @@ public class Dude : MonoBehaviour
 	void Update () 
 	{
 		UpdateMovement();
+        if (!isPlayer)
+        {
+            switch (InitialState)
+            {
+                case action.RUNNING_IN_CIRCLES:
+                    RunInCircles();
+                    break;
+                case action.MOVE_TOWARD_PLAYER:
+                    MoveTowardsPlayer();
+                    break;
+            }
+        }
 	}
 
 	void Attack()
@@ -141,4 +161,37 @@ public class Dude : MonoBehaviour
 			}
 		}
 	}
+
+    // RUNNING_IN_CIRCLES-related data
+    private const float _squareSize = 5.0f;
+    private static Vector3[] _runRoute = { 
+        new Vector3(0.0f, 0.0f, -1 * _squareSize), 
+        new Vector3(-1 * _squareSize, 0.0f, 0.0f),
+        new Vector3(0.0f, 0.0f,  _squareSize), 
+        new Vector3(1 * _squareSize, 0.0f, 0.0f)
+    };
+    // the current run direction
+    private int _runRouteDirection = 0;
+
+    void RunInCircles()
+    {
+        if (!_moving)
+        {
+            _runRouteDirection += 1;
+            if (_runRouteDirection == _runRoute.Length)
+            {
+                _runRouteDirection = 0;
+            }
+            Vector3 target = transform.position + _runRoute[_runRouteDirection];
+            MoveTowards(target);
+        }
+    }
+
+    void MoveTowardsPlayer()
+    {
+        if (!_moving)
+        {
+            MoveTowards(Dude.player.transform.position);
+        }
+    }
 }
