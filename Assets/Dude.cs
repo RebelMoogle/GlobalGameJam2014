@@ -96,11 +96,14 @@ public class Dude : MonoBehaviour
                 case action.SWARM:
                     SwarmToFaction();
                     break;
+                default: // idle 
+                    Idle();
+                    break;
             }
         }
 	}
 
-    void FixUpdate()
+    void FixedUpdate()
     {
 		UpdateMovement();
     }
@@ -175,6 +178,13 @@ public class Dude : MonoBehaviour
 			float distanceCovered = _journeyTime * _speed;
 			float fractionCovered = distanceCovered / _journeyLength;
 			transform.position = Vector3.Lerp(_startingPosition, _targetPosition, fractionCovered);
+            // add jitter if an AI
+            if (!isPlayer)
+            {
+                Vector3 jitter = new Vector3(Random.RandomRange(-0.1f, 0.1f), 0,
+                                             Random.RandomRange(-0.1f, 0.1f));
+                transform.position += jitter;
+            }
 			if ( Vector3.SqrMagnitude( transform.position - _targetPosition ) <= _stoppingDistanceSqr )
 			{
 				_moving = false;
@@ -193,6 +203,7 @@ public class Dude : MonoBehaviour
 
     // the current run direction
     private int _runRouteDirection = 0;
+
 
     void RunInCircles()
     {
@@ -224,10 +235,10 @@ public class Dude : MonoBehaviour
             // basically just swarming to the closes faction
             Vector3 closestAllyPosition = Vector3.zero;
             // minimum distance before swarming
-            float closestAllyDist = 3f; 
+            float closestAllyDist = 3f;
             foreach (var dude in _allDudes)
             {
-                if (Faction == dude.Faction)
+                if (Faction == dude.Faction && dude != this)
                 {
                     var dist = Vector3.Distance(transform.position, dude.transform.position);
                     if (closestAllyDist == -1f || dist < closestAllyDist)
@@ -240,7 +251,20 @@ public class Dude : MonoBehaviour
             {
                 MoveTowards(closestAllyPosition);
             }
+            else
+            {
+                Idle();
+            }
         }
+    }
+
+    // idle
+    void Idle()
+    {
+        // jitter
+        Vector3 jitter = new Vector3(Random.RandomRange(-0.1f, 0.1f), 0,
+                                     Random.RandomRange(-0.1f, 0.1f));
+        transform.position += jitter;
     }
 
     internal void OnReceivedAttack()
