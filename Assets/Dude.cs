@@ -39,7 +39,7 @@ public class Dude : MonoBehaviour
 	public bool isPlayer;
 
     // action if not a player
-    public action InitialState = action.IDLE;
+    public action Action = action.IDLE;
     // faction the player belongs to
     public faction Faction = faction.BLUE;
 
@@ -124,36 +124,8 @@ public class Dude : MonoBehaviour
 	{
         if (!isPlayer)
         {
-            switch (InitialState)
-            {
-                case action.RUNNING_IN_CIRCLES:
-                    RunInCircles();
-                    break;
-                case action.MOVE_TOWARD_PLAYER:
-                    MoveTowardsPlayer();
-                    break;
-                case action.SWARM:
-                    SwarmToFaction();
-                    break;
-                default: // idle 
-                    Idle();
-                    break;
-            }
-
-			// Attack if close enough
-
-			if ( Dude.player != null )
-			{
-				if ( Vector3.Distance (transform.position, Dude.player.transform.position) < _attackDistance )
-				{
-					StartAttacking();
-				}
-
-				                       }
+            AI();
         }
-
-
-
 		UpdateAttacking();
 	}
 
@@ -214,6 +186,48 @@ public class Dude : MonoBehaviour
 	{
 
 	}
+
+    void AI()
+    {
+        // here's my rudimentary AI
+        // if the player is close, move towards him.
+        // otherwise, swarm!
+        if (player != null && Vector3.Distance(transform.position, player.transform.position) < 2.0f)
+        {
+            Action = action.MOVE_TOWARD_PLAYER;
+        }
+        else
+        {
+            Action = action.SWARM;
+        }
+
+        // Attack if close enough
+
+        if (Dude.player != null)
+        {
+            if (Vector3.Distance(transform.position, Dude.player.transform.position) < _attackDistance)
+            {
+                StartAttacking();
+            }
+        }
+
+        // actual actions enacted
+        switch (Action)
+        {
+            case action.RUNNING_IN_CIRCLES:
+                RunInCircles();
+                break;
+            case action.MOVE_TOWARD_PLAYER:
+                MoveTowardsPlayer();
+                break;
+            case action.SWARM:
+                SwarmToFaction();
+                break;
+            default: // idle 
+                Idle();
+                break;
+        }
+    }
 
 	void OnMovementDown(GameObject e)
 	{
@@ -295,6 +309,7 @@ public class Dude : MonoBehaviour
 
     // the current run direction
     private int _runRouteDirection = 0;
+
 
 
     void RunInCircles()
