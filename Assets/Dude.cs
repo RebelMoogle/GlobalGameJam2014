@@ -102,8 +102,6 @@ public class Dude : MonoBehaviour
 
 	}
 
-
-
 	void OnMovementDown(GameObject e)
 	{
 		Vector3 target = transform.position + new Vector3(0.0f, 0.0f, -1.0f);
@@ -170,6 +168,7 @@ public class Dude : MonoBehaviour
         new Vector3(0.0f, 0.0f,  _squareSize), 
         new Vector3(1 * _squareSize, 0.0f, 0.0f)
     };
+
     // the current run direction
     private int _runRouteDirection = 0;
 
@@ -193,5 +192,10 @@ public class Dude : MonoBehaviour
         {
             MoveTowards(Dude.player.transform.position);
         }
+    }
+
+    internal void OnReceivedAttack()
+    {
+        Destroy(gameObject);
     }
 }
