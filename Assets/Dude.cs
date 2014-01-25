@@ -5,6 +5,12 @@ using System.Collections.Generic;
 public class Dude : MonoBehaviour 
 {
 
+    // configurable parameters
+    public float jitterMagnitude = 0.05f; // maximum jitter range
+    public float detectPlayerRange = 1f; // range that an enemyDetects a player
+    // range that two members of the same faction has to be in to swarm.
+    public float swarmRange = 2f;
+
 	private static List<Dude> _allDudes;
     public static Dude player;
 
@@ -192,7 +198,7 @@ public class Dude : MonoBehaviour
         // here's my rudimentary AI
         // if the player is close, move towards him.
         // otherwise, swarm!
-        if (player != null && Vector3.Distance(transform.position, player.transform.position) < 2.0f)
+        if (player != null && Vector3.Distance(transform.position, player.transform.position) < detectPlayerRange)
         {
             Action = action.MOVE_TOWARD_PLAYER;
         }
@@ -287,9 +293,7 @@ public class Dude : MonoBehaviour
             // add jitter if an AI
             if (!isPlayer)
             {
-                Vector3 jitter = new Vector3(Random.RandomRange(-0.1f, 0.1f), 0,
-                                             Random.RandomRange(-0.1f, 0.1f));
-                transform.position += jitter;
+                addJitter();
             }
 			if ( Vector3.SqrMagnitude( transform.position - _targetPosition ) <= _stoppingDistanceSqr )
 			{
@@ -309,8 +313,6 @@ public class Dude : MonoBehaviour
 
     // the current run direction
     private int _runRouteDirection = 0;
-
-
 
     void RunInCircles()
     {
@@ -371,10 +373,7 @@ public class Dude : MonoBehaviour
     // idle
     void Idle()
     {
-        // jitter
-        Vector3 jitter = new Vector3(Random.RandomRange(-0.1f, 0.1f), 0,
-                                     Random.RandomRange(-0.1f, 0.1f));
-        transform.position += jitter;
+        addJitter();
     }
 
     internal void OnReceivedAttack()
@@ -402,5 +401,13 @@ public class Dude : MonoBehaviour
                 break;
         }
         renderer.material.color = objectColor;
+    }
+
+    void addJitter()
+    {
+        // jitter
+        Vector3 jitter = new Vector3(Random.RandomRange(-jitterMagnitude, jitterMagnitude), 0,
+                                     Random.RandomRange(-jitterMagnitude, jitterMagnitude));
+        transform.position += jitter;
     }
 }
