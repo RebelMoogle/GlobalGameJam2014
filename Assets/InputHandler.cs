@@ -14,7 +14,8 @@ public class InputHandler : MonoBehaviour {
 	public event EventHandler KillAction;
 
 	// Use this for initialization
-	void Start () {
+	void Start () 
+	{
 	
 	}
 	
@@ -22,17 +23,25 @@ public class InputHandler : MonoBehaviour {
 	void Update () 
 	{
 		float axisVal = Input.GetAxis("Horizontal");
-		if(axisVal <= -0.1)
+		if( axisVal <= -0.1 || Input.GetKeyDown(KeyCode.A) )
+		{
 			OnMoveLeft();
-		else if (axisVal >= 0.1)
+		}
+		else if ( axisVal >= 0.1 || Input.GetKeyDown(KeyCode.D) )
+		{
 			OnMoveRight();
+		}
 
 		axisVal = Input.GetAxis("Vertical");
 
-		if(axisVal <= -0.1)
+		if( axisVal <= -0.1 || Input.GetKeyDown(KeyCode.S) )
+		{
 			OnMoveDown();
-		else if(axisVal >= 0.1)
+		}
+		else if( axisVal >= 0.1 || Input.GetKeyDown(KeyCode.W) )
+		{
 			OnMoveUp();
+		}
 
 		if(Input.GetButtonDown("KillAction"))
 			OnKillAction();
