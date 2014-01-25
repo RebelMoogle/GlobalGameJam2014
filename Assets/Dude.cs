@@ -83,7 +83,6 @@ public class Dude : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
 	{
-		UpdateMovement();
         if (!isPlayer)
         {
             switch (InitialState)
@@ -100,6 +99,11 @@ public class Dude : MonoBehaviour
             }
         }
 	}
+
+    void FixUpdate()
+    {
+		UpdateMovement();
+    }
 
 	void Attack()
 	{

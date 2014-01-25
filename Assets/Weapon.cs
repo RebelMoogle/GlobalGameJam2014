@@ -18,7 +18,7 @@ public class Weapon : MonoBehaviour {
         var dude = collision.collider.GetComponent<Dude>();
         if (dude != null)
         {
-            // dude.OnReceivedAttack();
+            dude.OnReceivedAttack();
         }
     }
 }
