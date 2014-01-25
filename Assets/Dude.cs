@@ -44,6 +44,10 @@ public class Dude : MonoBehaviour
 	private float _journeyTime;
 	private InputHandler _input;
 
+	public GameObject _weaponPrefab;
+	private Weapon _weapon;
+
+
 	void Awake()
 	{
 		if ( _allDudes == null )
@@ -55,7 +59,35 @@ public class Dude : MonoBehaviour
         {
             player = this;
         }
-        setStyle();
+
+		// Load the weapon!
+		if ( _weaponPrefab != null )
+		{
+			GameObject weaponGO = (GameObject)Instantiate(_weaponPrefab);
+			if ( weaponGO != null )
+			{
+				_weapon = weaponGO.GetComponent<Weapon>();
+				if ( _weapon != null )
+				{
+					_weapon.transform.parent = transform;
+					_weapon.transform.forward = transform.forward;
+					_weapon.transform.localPosition = new Vector3(0.0f, 0.0f, 1.0f);
+				}
+				else
+				{
+					Debug.LogError("[Dude] Weapon prefab does not contain a weapon script", this);
+				}
+			}
+			else
+			{
+				Debug.LogError("[Dude] Failed to loadweapon prefab", this);
+			}
+		}
+		else
+		{
+			Debug.Log("[Dude] Weapon prefab not set on " + this.name + " ", this);
+		}
+		
 	}
 
 
@@ -100,7 +132,7 @@ public class Dude : MonoBehaviour
         }
 	}
 
-    void FixUpdate()
+    void FixedUpdate()
     {
 		UpdateMovement();
     }
@@ -212,7 +244,10 @@ public class Dude : MonoBehaviour
     {
         if (!_moving)
         {
-            MoveTowards(Dude.player.transform.position);
+			if ( Dude.player != null )
+			{
+            	MoveTowards(Dude.player.transform.position);
+			}
         }
     }
 
@@ -245,7 +280,7 @@ public class Dude : MonoBehaviour
 
     internal void OnReceivedAttack()
     {
-        Destroy(gameObject);
+       Destroy(gameObject);
     }
 
     void OnDestroy()
