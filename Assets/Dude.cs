@@ -15,7 +15,12 @@ public class Dude : MonoBehaviour
 	private bool _moving = false;
 
 	// Attacking stuff
-	private const float _attackDistance = 1.0f;
+	public float _attackDistance = 2.5f;
+	public float _attackDelay = 0.3f;
+	// default the time to last attack at the attack delay so the character can attack as soon as the game starts without delay.
+	private float _timeSinceLastAttack = 0.3f; 
+	private const float _attackDuration = 0.3f;
+	private float _attackTimer = 0.0f;
 
     public enum faction
     {
@@ -47,7 +52,6 @@ public class Dude : MonoBehaviour
 	public GameObject _weaponPrefab;
 	private Weapon _weapon;
 
-
 	void Awake()
 	{
 		if ( _allDudes == null )
@@ -72,6 +76,8 @@ public class Dude : MonoBehaviour
 					_weapon.transform.parent = transform;
 					_weapon.transform.forward = transform.forward;
 					_weapon.transform.localPosition = new Vector3(0.0f, 0.0f, 1.0f);
+
+					_weapon.gameObject.SetActive(false);
 				}
 				else
 				{
@@ -133,7 +139,22 @@ public class Dude : MonoBehaviour
                     Idle();
                     break;
             }
+
+			// Attack if close enough
+
+			if ( Dude.player != null )
+			{
+				if ( Vector3.Distance (transform.position, Dude.player.transform.position) < _attackDistance )
+				{
+					StartAttacking();
+				}
+
+				                       }
         }
+
+
+
+		UpdateAttacking();
 	}
 
     void FixedUpdate()
@@ -141,9 +162,47 @@ public class Dude : MonoBehaviour
 		UpdateMovement();
     }
 
-	void Attack()
+	void StartAttacking()
 	{
-		//transform.forward 
+		if ( _weapon != null )
+		{
+			if ( !_weapon.gameObject.activeInHierarchy )
+			{
+				if ( _timeSinceLastAttack > _attackDelay )
+				{
+					_attackTimer = 0.0f;
+					_weapon.gameObject.SetActive(true);
+				}
+			}
+		}
+	}
+	void UpdateAttacking()
+	{
+		if( _weapon != null )
+		{
+			if ( _weapon.gameObject.activeInHierarchy )
+			{
+				// Attacking!
+				if ( _attackTimer < _attackDuration )
+				{
+					_attackTimer += Time.deltaTime;
+				}
+				else
+				{
+					// Done attacking
+					_weapon.gameObject.SetActive(false);
+					_timeSinceLastAttack = 0.0f;
+
+				}
+			}
+			else
+			{
+				// Done attacking!
+				_timeSinceLastAttack += Time.deltaTime;
+			}
+		}
+		//else no weapon
+
 	}
 
 	void Influence()
