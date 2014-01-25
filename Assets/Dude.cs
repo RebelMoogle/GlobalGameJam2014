@@ -6,6 +6,7 @@ public class Dude : MonoBehaviour
 {
 
 	private static List<Dude> _allDudes;
+    public static Dude player;
 
 	private const float _stoppingDistance = 0.2f;
 	private const float _stoppingDistanceSqr = _stoppingDistance * _stoppingDistance;
@@ -33,6 +34,10 @@ public class Dude : MonoBehaviour
 			_allDudes = new List<Dude>();
 		}
 		_allDudes.Add (this);
+        if (this.isPlayer)
+        {
+            player = this;
+        }
 	}
 
 
