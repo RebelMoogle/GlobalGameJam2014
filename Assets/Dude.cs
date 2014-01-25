@@ -1,8 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Dude : MonoBehaviour 
 {
+
+	private static List<Dude> _allDudes;
 
 	private const float _stoppingDistance = 0.2f;
 	private const float _stoppingDistanceSqr = _stoppingDistance * _stoppingDistance;
@@ -10,24 +13,46 @@ public class Dude : MonoBehaviour
 	private Vector3 _targetPosition;
 	private bool _moving = false;
 
+	// Attacking stuff
+	private const float _attackDistance = 1.0f;
+
+
+	// There can only be one! (Or two?)?
+	public bool isPlayer;
+
 	// move speed in units per second
 	public float _speed = 1.0f;
 	private float _journeyLength;
 	private float _journeyTime;
 	private InputHandler _input;
 
+	void Awake()
+	{
+		if ( _allDudes == null )
+		{
+			_allDudes = new List<Dude>();
+		}
+		_allDudes.Add (this);
+	}
+
 
 	// Use this for initialization
 	void Start () 
 	{
 		_targetPosition = transform.position;
-		_input = GetComponent<InputHandler>();
-		if ( _input != null )
+
+		// Only the player needs to hook up the input controller
+		if ( isPlayer )
 		{
-			_input.MoveDown += OnMovementDown;
-			_input.MoveUp += OnMovementUp;
-			_input.MoveLeft += OnMovementLeft;
-			_input.MoveRight += OnMovementRight;
+			_input = GetComponent<InputHandler>();
+			if ( _input != null )
+			{
+
+				_input.MoveDown += OnMovementDown;
+				_input.MoveUp += OnMovementUp;
+				_input.MoveLeft += OnMovementLeft;
+				_input.MoveRight += OnMovementRight;
+			}
 		}
 	}
 	
@@ -37,9 +62,14 @@ public class Dude : MonoBehaviour
 		UpdateMovement();
 	}
 
-	void Kill()
+	void Attack()
 	{
+		//transform.forward 
+	}
 
+	void Influence()
+	{
+		
 	}
 
 	void Stealth()
@@ -47,10 +77,7 @@ public class Dude : MonoBehaviour
 
 	}
 
-	void Influence()
-	{
 
-	}
 
 	void OnMovementDown(GameObject e)
 	{
@@ -98,6 +125,7 @@ public class Dude : MonoBehaviour
 	{
 		if( _moving )
 		{
+			transform.forward = _targetPosition - transform.position;
 			_journeyTime += Time.deltaTime;
 			float distanceCovered = _journeyTime * _speed;
 			float fractionCovered = distanceCovered / _journeyLength;
