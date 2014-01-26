@@ -110,7 +110,8 @@ public class Dude : MonoBehaviour
 			Debug.Log("[Dude] Weapon prefab not set on " + this.name + " ", this);
 		}
 
-        setStyle();
+		if(renderer != null)
+		   setStyle();
 	}
 
 
@@ -277,7 +278,7 @@ public class Dude : MonoBehaviour
 		Debug.Log("Directed Input Recieved",this);
 	}
 
-    void OnKillAction()
+    void OnKillAction(GameObject e)
     {
 		if (isPlayer)
 		{
