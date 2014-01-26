@@ -20,7 +20,7 @@ public class Weapon : MonoBehaviour {
     void OnCollisionEnter(Collision collision)
     {
         var dude = collision.collider.GetComponent<Dude>();
-        if (dude != null)
+        if (dude != null && !dude.CompareTag(owner.tag))
         {
             if (owner == Dude.player)
             {
