@@ -102,7 +102,7 @@ public class GameManager : MonoBehaviour {
         else
         {
             LevelOver.kills = PlayerStats.kills;
-            if (nextLevel == null || nextLevel.Equals(""))
+            if (nextLevel == null || nextLevel.Equals("") || !LevelOver.won)
             {
                 Application.LoadLevel("Ending");
             }

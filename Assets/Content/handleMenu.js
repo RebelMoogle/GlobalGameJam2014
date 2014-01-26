@@ -35,7 +35,7 @@ function OnGUI(){
 	GUILayout.BeginArea(Rect(15,30, 100,500));//Rect(Screen.width/2 - buttonWidth/2, Screen.height/2 -200, buttonWidth, 400));
 		if(GUILayout.Button("New Game", GUILayout.Height(buttonHeight))){
 			//Application.LoadLevel("FirstTestLevel"); //for now, go to Russell's test  level
-			Application.LoadLevel("leveLOne");
+			Application.LoadLevel("LevelZero");
 			}
 		GUILayout.Space(buttonSpacing);
 		if(GUILayout.Button("Instructions", GUILayout.Height(buttonHeight))){

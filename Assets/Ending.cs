@@ -44,8 +44,16 @@ public class Ending : MonoBehaviour {
 	}
 
     private string createEndingString() {
-        string endingString = "\n\nIn the end, Caesar's conquest ended gloriously: his name was known throughout the land. \n" + 
-                              "at his eulogy, representatives from all over the land came to speak.\n\n";
+
+        string endingString = ""; 
+        
+        if (LevelOver.won) {
+            endingString += "\n\nIn the end, Caesar's conquest ended gloriously: \n his name was known throughout the land. \n";
+        } else {
+            endingString += "\n\nIn the end, Caesar's conquest was cut short: However, \n his name was known throughout the land. \n";
+        }
+       endingString += "\nat his eulogy, representatives from all over the land came to speak.\n\n";
+
         // romans
         endingString += "\n A Roman representative stepped up to the podium, and he began to speak:\n";
         if (AILibs.factionLikesPlayer(FactionType.ROMAN)) {
