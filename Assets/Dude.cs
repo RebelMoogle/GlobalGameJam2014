@@ -465,8 +465,8 @@ public class Dude : MonoBehaviour
     void addJitter()
     {
         // jitter
-        Vector3 jitter = new Vector3(Random.RandomRange(-jitterMagnitude, jitterMagnitude), 0,
-                                     Random.RandomRange(-jitterMagnitude, jitterMagnitude));
+        Vector3 jitter = new Vector3(Random.Range(-jitterMagnitude, jitterMagnitude), 0,
+                                     Random.Range(-jitterMagnitude, jitterMagnitude));
         transform.position += jitter;
     }
 }
