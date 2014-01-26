@@ -223,9 +223,13 @@ void Start ()
 							// don't hit self!
 							if ( dude != this )
 							{
-								dude.OnReceivedAttack();
+								FactionType myFaction = AILibs.getFactionType(this);
+								FactionType dudeFaction = AILibs.getFactionType(dude);
+								if ( myFaction != dudeFaction )
+								{
+									dude.OnReceivedAttack();
+								}
 							}
-							
 						}
 					}
 					_weapon.gameObject.SetActive(true);
