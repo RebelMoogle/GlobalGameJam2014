@@ -13,25 +13,36 @@ public class GlobalManager : MonoBehaviour {
     // TODO: # of times aggressed? a faction
     // # of times 
     public static int aggressiveness;
+    public static bool _isInstatiated = false;
 
     void Awake()
     {
         DontDestroyOnLoad(this.gameObject);
-        // initialize opinions
-        factionOpinion[FactionType.ROMAN] = 1;
-        factionOpinion[FactionType.VIKING] = -1;
-        factionOpinion[FactionType.ROBINHOODS] = 0;
-        Dude.dudeDies += (dude) =>
-        {
-            Debug.Log("faction death: " + dude.tag);
-            increment(factionDeathCounts, dude.tag);
-        };
-        Weapon.playerKilledEnemy += (dude) =>
-        {
-            Debug.Log("faction kill: " + dude.tag);
-            increment(factionKillCounts, dude.tag);
-        };
+        instantiate();
     }
+
+    private void instantiate()
+    {
+        if (!_isInstatiated)
+        {
+            // initialize opinions
+            factionOpinion[FactionType.ROMAN] = 1;
+            factionOpinion[FactionType.VIKING] = -1;
+            factionOpinion[FactionType.ROBINHOODS] = 0;
+            Dude.dudeDies += (dude) =>
+            {
+                Debug.Log("faction death: " + dude.tag);
+                increment(factionDeathCounts, dude.tag);
+            };
+            Weapon.playerKilledEnemy += (dude) =>
+            {
+                Debug.Log("faction kill: " + dude.tag);
+                increment(factionKillCounts, dude.tag);
+            };
+            _isInstatiated = true;
+        }
+    }
+
 	// Use this for initializationm
 	void Start () {
 	}
