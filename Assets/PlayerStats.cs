@@ -12,7 +12,7 @@ public class PlayerStats : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        Weapon.playerKilledEnemy += () => { 
+        Weapon.playerKilledEnemy += (dude) => { 
             kills++; 
         };
 	}

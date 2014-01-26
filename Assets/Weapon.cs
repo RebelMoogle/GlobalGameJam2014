@@ -4,7 +4,8 @@ using System.Collections;
 public class Weapon : MonoBehaviour {
 
     public Dude owner;
-    public static event EventEngine.Event playerKilledEnemy;
+    public delegate void DeathCallback(Dude dude);
+    public static event DeathCallback playerKilledEnemy;
 
 	// Use this for initialization
 	void Start () {
@@ -23,7 +24,7 @@ public class Weapon : MonoBehaviour {
         {
             if (owner == Dude.player)
             {
-                if (playerKilledEnemy != null) { playerKilledEnemy(); }
+                if (playerKilledEnemy != null) { playerKilledEnemy(dude); }
             }
             dude.OnReceivedAttack();
         }

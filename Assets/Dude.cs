@@ -14,6 +14,8 @@ public class Dude : MonoBehaviour
 
     // events
     public static event EventEngine.Event playerDies;
+    public delegate void DeathCallback(Dude dude);
+    public static event DeathCallback dudeDies;
 
     public static int totalDudes = 0;
 	public static List<Dude> allDudes;
@@ -56,8 +58,6 @@ public class Dude : MonoBehaviour
 
     // action if not a player
     private action Action = action.IDLE;
-    // faction the player belongs to
-   	Faction myFaction;
 
 	// move speed in units per second
 	public float _speed = 1.0f;
@@ -117,11 +117,6 @@ public class Dude : MonoBehaviour
 		{
 			Debug.Log("[Dude] Weapon prefab not set on " + this.name + " ", this);
 		}
-
-		myFaction = GetComponent<Faction>();
-
-//		if(renderer != null)
-//		   setStyle();
 	}
 
 
@@ -289,7 +284,6 @@ public class Dude : MonoBehaviour
 	{
 		Vector3 target = transform.position + unitDirection;
 		MoveTowards(target);
-		Debug.Log("Directed Input Recieved",this);
 	}
 
     void OnKillAction(GameObject e)
@@ -445,21 +439,10 @@ public class Dude : MonoBehaviour
                 playerDies(); 
             }
         }
+        if (dudeDies != null) {
+            dudeDies(this);
+        }
     }
-
-//    void setStyle()
-//    {
-//        Color objectColor = Color.white;
-//        switch(currentFaction) {
-//            case faction.BLUE:
-//                objectColor = Color.blue;
-//                break;
-//            case faction.RED:
-//                objectColor = Color.red;
-//                break;
-//        }
-//        renderer.material.color = objectColor;
-//    }
 
 	void LateUpdate()
 	{

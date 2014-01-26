@@ -18,7 +18,7 @@ public class Faction : MonoBehaviour {
 		}
 	}
 
-	string currentTag;
+	private string currentTag;
 
 	public GameObject romanFab;
 	public GameObject vitringFab;
