@@ -40,13 +40,6 @@ public class Dude : MonoBehaviour
 
 	bool _receivedInput;
 
-//    public enum faction
-//    {
-//        PLAYER,
-//        RED,
-//        BLUE
-//    }
-
     public enum action {
         IDLE,
         RUNNING_IN_CIRCLES,
@@ -57,9 +50,6 @@ public class Dude : MonoBehaviour
 
 	// There can only be one! (Or two?)?
 	public bool isPlayer;
-
-    // action if not a player
-    private action Action = action.IDLE;
 
 	// move speed in units per second
 	public float _speed = 1.0f;
@@ -135,10 +125,6 @@ public class Dude : MonoBehaviour
 			if ( _input != null )
 			{
 
-//				_input.MoveDown += OnMovementDown;
-//				_input.MoveUp += OnMovementUp;
-//				_input.MoveLeft += OnMovementLeft;
-//				_input.MoveRight += OnMovementRight;
 				_input.MoveDirection += OnMovementDirection;
 				_input.FacingDirection += OnFacingDirection;
                 _input.KillAction += OnKillAction;
@@ -225,23 +211,23 @@ public class Dude : MonoBehaviour
         // here's my rudimentary AI
         // if the player is close, move towards him.
         // otherwise, swarm!
+        var faction = LibsAI.getFactionType(this);
+        var factionOpinion = GlobalManager.factionOpinion[LibsAI.getFactionType(this)];
         Dude nearestEnemy = findNearestEnemy(detectEnemyRange);
-        if (player != null && Vector3.Distance(transform.position, player.transform.position) < detectPlayerRange)
-        {
+        if (LibsAI.factionLikesPlayer(faction) || LibsAI.factionDislikesPlayer(faction) &&
+            (player != null && Vector3.Distance(transform.position, player.transform.position) < detectPlayerRange)) {
             MoveTowardsPlayer();
-        }
-        else if (nearestEnemy != null)
+        } else if (nearestEnemy != null)
         {
             MoveTowardsTarget(nearestEnemy.transform.position);
-        } 
-        else 
+        } else 
         {
             SwarmToFaction();
         }
 
         // Attack if close enough
         var closestDistance = _attackDistance + 1;
-        if (Dude.player != null) {
+        if (Dude.player != null && LibsAI.factionDislikesPlayer(faction)) {
             var playerDistance = Vector3.Distance(transform.position, Dude.player.transform.position);
             if (playerDistance < closestDistance) {
                 closestDistance = playerDistance;
@@ -400,7 +386,7 @@ public class Dude : MonoBehaviour
         Dude nearestEnemy = null;
         foreach (var dude in allDudes)
         {
-			if (!dude.CompareTag(tag))
+			if (!dude.CompareTag(tag) && !dude.isPlayer)
             {
                 var distance = Vector3.Distance(transform.position, dude.transform.position);
                 if (distance < maxRange)
@@ -515,7 +501,4 @@ public class Dude : MonoBehaviour
 //        }
 //        
     }
-
-
-
 }

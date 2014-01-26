@@ -4,7 +4,9 @@ using System.Collections;
 public enum FactionType
 {
 	ROMAN,
-	VIKING
+	VIKING,
+    ROBINHOODS,
+    PLAYER
 }
 
 public class Faction : MonoBehaviour {
@@ -51,15 +53,12 @@ public class Faction : MonoBehaviour {
 	// set tag
 	void SetFaction(FactionType newFaction)
 	{
-//		if(newFaction == currentType)
-//			return; // we are already the correct faction, we shall do nothing
-
-		// set tag
-
-
+        var dude = GetComponent<Dude>();
 		currentType = newFaction;
         if(newFaction == FactionType.ROMAN)
 		{
+            dude.detectEnemyRange = 2f;
+            dude.detectPlayerRange = 3f;
 			if(currentClone != null)
 				Destroy(currentClone);
 
@@ -72,8 +71,10 @@ public class Faction : MonoBehaviour {
 			this.tag = "ROMAN";
 			   
 		}
-		else
+		else if(newFaction == FactionType.VIKING)
 		{
+            dude.detectEnemyRange = 10f;
+            dude.detectPlayerRange = 2f;
 			if(currentClone != null)
 				Destroy(currentClone);
 
@@ -84,6 +85,14 @@ public class Faction : MonoBehaviour {
 			}
 				
 			this.tag = "VITRING";
+        }
+        else if (newFaction == FactionType.ROBINHOODS)
+        {
+            this.tag = "ROBINHOODS";
+        }
+        else
+        {
+            this.tag = "PLAYER";
         }
 	}
 }
