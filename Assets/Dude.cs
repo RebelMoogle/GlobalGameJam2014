@@ -201,6 +201,22 @@ void Start ()
 				if ( _timeSinceLastAttack > _attackDelay )
 				{
 					_attackTimer = 0.0f;
+					RaycastHit hit;
+					Ray ray = new Ray(transform.position + (transform.forward * 0.5f), transform.forward);
+
+					if ( Physics.SphereCast(ray, 0.4f, out hit, 3.0f, 1<<9 ) )
+				    {
+						Dude dude = hit.collider.GetComponent<Dude>();
+						if ( dude != null )
+						{
+							// don't hit self!
+							if ( dude != this )
+							{
+								dude.OnReceivedAttack();
+							}
+							
+						}
+					}
 					_weapon.gameObject.SetActive(true);
 				}
 			}
