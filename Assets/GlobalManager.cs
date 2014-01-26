@@ -28,7 +28,8 @@ public class GlobalManager : MonoBehaviour {
             // initialize opinions
             factionOpinion[FactionType.ROMAN] = 1;
             factionOpinion[FactionType.VIKING] = -1;
-            factionOpinion[FactionType.ROBINHOODS] = 0;
+            factionOpinion[FactionType.ROBIN] = 0;
+            factionOpinion[FactionType.PLAYER] = 0;
             Dude.dudeDies += (dude) =>
             {
                 Debug.Log("faction death: " + dude.tag);

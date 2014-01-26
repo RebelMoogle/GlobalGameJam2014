@@ -5,7 +5,7 @@ public enum FactionType
 {
 	ROMAN,
 	VIKING,
-    ROBINHOODS,
+    ROBIN,
     PLAYER
 }
 
@@ -24,6 +24,7 @@ public class Faction : MonoBehaviour {
 
 	public GameObject romanFab;
 	public GameObject vitringFab;
+    public GameObject robinFab;
 
 	GameObject currentClone = null;
 
@@ -86,9 +87,19 @@ public class Faction : MonoBehaviour {
 				
 			this.tag = "VITRING";
         }
-        else if (newFaction == FactionType.ROBINHOODS)
+        else if (newFaction == FactionType.ROBIN)
         {
-            this.tag = "ROBINHOODS";
+            dude.detectEnemyRange = 0.5f;
+            dude.detectPlayerRange = 0.5f;
+			if(currentClone != null)
+				Destroy(currentClone);
+
+			if(romanFab != null)
+			{
+				currentClone = (GameObject)Instantiate(robinFab, this.transform.position, this.transform.rotation);
+				currentClone.transform.parent = transform;
+			}
+            this.tag = "ROBIN";
         }
         else
         {

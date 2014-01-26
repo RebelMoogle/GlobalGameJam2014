@@ -12,7 +12,7 @@ public static class LibsAI {
             case "VITRING":
                 return FactionType.VIKING;
             case "ROBINHOODS":
-                return FactionType.ROBINHOODS;
+                return FactionType.ROBIN;
         }
         return FactionType.PLAYER;
     }
