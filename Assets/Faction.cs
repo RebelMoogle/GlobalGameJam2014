@@ -25,6 +25,8 @@ public class Faction : MonoBehaviour {
 	public GameObject romanFab;
 	public GameObject vitringFab;
     public GameObject robinFab;
+    public delegate void DudeDelegate(Dude dude);
+    public DudeDelegate onDeath;
 
 	GameObject currentClone = null;
 
@@ -70,6 +72,7 @@ public class Faction : MonoBehaviour {
 			}
 
 			this.tag = "ROMAN";
+            this.onDeath = AIRoman.OnDeath;
 			   
 		}
 		else if(newFaction == FactionType.VIKING)
@@ -86,6 +89,7 @@ public class Faction : MonoBehaviour {
 			}
 				
 			this.tag = "VITRING";
+            this.onDeath = AIVitring.OnDeath;
         }
         else if (newFaction == FactionType.ROBIN)
         {
