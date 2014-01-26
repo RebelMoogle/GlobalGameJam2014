@@ -26,10 +26,10 @@ public class GlobalManager : MonoBehaviour {
         if (!_isInstatiated)
         {
             // initialize opinions
-            factionOpinion[FactionType.ROMAN] = -1; // originally 1
+            factionOpinion[FactionType.ROMAN] = 1; 
             factionOpinion[FactionType.VIKING] = -1;
             factionOpinion[FactionType.ROBIN] = 0;
-            factionOpinion[FactionType.PLAYER] = 0;
+            factionOpinion[FactionType.PLAYER] = 1;
             Dude.dudeDies += (dude) =>
             {
                 Debug.Log("faction death: " + dude.tag);
@@ -41,7 +41,6 @@ public class GlobalManager : MonoBehaviour {
                 increment(factionKillCounts, dude.tag);
             };
             _isInstatiated = true;
-            AILibs.startEventListeners();
         }
     }
 

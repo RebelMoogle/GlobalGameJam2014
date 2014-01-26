@@ -268,21 +268,21 @@ void Start ()
         var faction = AILibs.getFactionType(this);
         var factionOpinion = GlobalManager.factionOpinion[AILibs.getFactionType(this)];
         Dude nearestEnemy = findNearestEnemy(detectEnemyRange);
-        if (AILibs.factionLikesPlayer(faction) || AILibs.factionDislikesPlayer(faction) &&
-            (player != null && Vector3.Distance(transform.position, player.transform.position) < detectPlayerRange)) {
+        bool playerWithinRange = Vector3.Distance(transform.position, Dude.player.transform.position) * Mathf.Abs(factionOpinion) < detectPlayerRange;
+        if (AILibs.factionDislikesPlayer(faction) && playerWithinRange) {
             MoveTowardsPlayer();
-        } else if (nearestEnemy != null)
-        {
+        } else if (nearestEnemy != null) {
             MoveTowardsTarget(nearestEnemy.transform.position);
-        } else 
-        {
+        } else if (AILibs.factionLikesPlayer(faction) && playerWithinRange) {
+            MoveTowardsPlayer();
+        } else {
             SwarmToFaction();
         }
 
         // Attack if close enough
         var closestDistance = _attackDistance + 1;
         if (Dude.player != null && AILibs.factionDislikesPlayer(faction)) {
-            var playerDistance = Vector3.Distance(transform.position, Dude.player.transform.position);
+            var playerDistance = Vector3.Distance(transform.position, Dude.player.transform.position) * Mathf.Abs(GlobalManager.factionOpinion[faction]);
             if (playerDistance < closestDistance) {
                 closestDistance = playerDistance;
             }
@@ -517,6 +517,11 @@ void Start ()
         }
         if (dudeDies != null) {
             dudeDies(this);
+        }
+        var faction = this.GetComponent<Faction>();
+        if (faction != null && faction.onDeath != null)
+        {
+            faction.onDeath(this);
         }
     }
 

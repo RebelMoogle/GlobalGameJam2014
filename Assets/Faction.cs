@@ -104,6 +104,7 @@ public class Faction : MonoBehaviour {
 				currentClone.transform.parent = transform;
 			}
             this.tag = "ROBIN";
+            this.onDeath = AIRobin.OnDeath;
         }
         else
         {
