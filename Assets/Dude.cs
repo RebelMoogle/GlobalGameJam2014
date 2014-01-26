@@ -87,14 +87,16 @@ public class Dude : MonoBehaviour
 				{
                     _weapon.owner = this;
 					_weapon.transform.parent = transform;
-					_weapon.transform.forward = transform.forward;
-					_weapon.transform.localPosition = new Vector3(0.0f, 0.0f, 1.0f);
+
                     if (isPlayer) {
-                        // GIANT SWORD WHAT
-                        _weapon.transform.localScale *= 3;
-                        _weapon.transform.localPosition = 
-                            _weapon.transform.localPosition += new Vector3(0.0f, 0.0f, 2.0f);
+                        _weapon.forwardMultiplier = 0.4f;
+						_weapon.rightMultiplier = 0.2f;
                     }
+					else
+					{
+						_weapon.forwardMultiplier = 0.0f;
+						_weapon.rightMultiplier = 1.0f;
+					}
 
 					_weapon.gameObject.SetActive(false);
 				}
@@ -127,7 +129,7 @@ public class Dude : MonoBehaviour
 				_influencer.transform.forward = transform.forward;
 				_influencer.transform.localPosition = new Vector3(0.0f, 0.0f, 1.0f);
 				if (isPlayer) {
-					// GIANT SWORD WHAT
+					// giant influencer
 					_influencer.transform.localScale *= 3;
 					_influencer.transform.localPosition = 
 						_influencer.transform.localPosition += new Vector3(0.0f, 0.0f, 2.0f);
@@ -201,6 +203,22 @@ void Start ()
 				if ( _timeSinceLastAttack > _attackDelay )
 				{
 					_attackTimer = 0.0f;
+					RaycastHit hit;
+					Ray ray = new Ray(transform.position + (transform.forward * 0.5f), transform.forward);
+
+					if ( Physics.SphereCast(ray, 0.4f, out hit, 3.0f, 1<<9 ) )
+				    {
+						Dude dude = hit.collider.GetComponent<Dude>();
+						if ( dude != null )
+						{
+							// don't hit self!
+							if ( dude != this )
+							{
+								dude.OnReceivedAttack();
+							}
+							
+						}
+					}
 					_weapon.gameObject.SetActive(true);
 				}
 			}

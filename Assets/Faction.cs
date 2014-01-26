@@ -102,7 +102,7 @@ public class Faction : MonoBehaviour {
 			if(currentClone != null)
 				Destroy(currentClone);
 
-			if(romanFab != null)
+			if(robinFab != null)
 			{
 				currentClone = (GameObject)Instantiate(robinFab, this.transform.position, this.transform.rotation);
 				currentClone.transform.parent = transform;
