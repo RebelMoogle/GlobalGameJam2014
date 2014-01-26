@@ -4,8 +4,6 @@ using System.Collections;
 public class Weapon : MonoBehaviour {
 
     public Dude owner;
-    public delegate void DeathCallback(Dude dude);
-    public static event DeathCallback playerKilledEnemy;
 
 	public ParticleSystem swooshParticles;
 	public float swingSpeed = 1.0f;
@@ -78,10 +76,6 @@ public class Weapon : MonoBehaviour {
         var dude = collision.collider.GetComponent<Dude>();
         if (dude != null && !dude.CompareTag(owner.tag))
         {
-            if (owner == Dude.player || !dude.CompareTag(owner.tag))
-            {
-                if (playerKilledEnemy != null) { playerKilledEnemy(dude); }
-            }
             dude.OnReceivedAttack();
         }
     }

@@ -9,6 +9,6 @@ public static class AIRoman {
 
     public static void OnDeath(Dude dude)
     {
-        GlobalManager.modifyOpinion(FactionType.ROMAN, -0.1f);
+        GlobalManager.modifyOpinion(FactionType.ROMAN, -0.5f);
     }
 }

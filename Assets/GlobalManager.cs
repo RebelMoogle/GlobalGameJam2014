@@ -25,6 +25,10 @@ public class GlobalManager : MonoBehaviour {
     {
         if (!_isInstatiated)
         {
+            Dude.playerKilledEnemy += (dude) =>
+            {
+                factionOpinion[FactionType.VIKING] += 0.2f;
+            };
             // initialize opinions
             factionOpinion[FactionType.ROMAN] = 1; 
             factionOpinion[FactionType.VIKING] = -1;
@@ -35,7 +39,7 @@ public class GlobalManager : MonoBehaviour {
                 Debug.Log("faction death: " + dude.tag);
                 increment(factionDeathCounts, dude.tag);
             };
-            Weapon.playerKilledEnemy += (dude) =>
+            Dude.playerKilledEnemy += (dude) =>
             {
                 Debug.Log("faction kill: " + dude.tag);
                 increment(factionKillCounts, dude.tag);

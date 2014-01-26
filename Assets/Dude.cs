@@ -16,6 +16,7 @@ public class Dude : MonoBehaviour
     // events
     public static event EventEngine.Event playerDies;
     public delegate void DeathCallback(Dude dude);
+    public static event DeathCallback playerKilledEnemy;
     public static event DeathCallback dudeDies;
 
     public static int totalDudes = 0;
@@ -226,6 +227,10 @@ void Start ()
 							{
 								FactionType myFaction = AILibs.getFactionType(this);
 								FactionType dudeFaction = AILibs.getFactionType(dude);
+                                if (this == Dude.player)
+                                {
+                                    if (playerKilledEnemy != null) { playerKilledEnemy(dude); }
+                                }
 								if ( myFaction != dudeFaction )
 								{
 									dude.OnReceivedAttack();
