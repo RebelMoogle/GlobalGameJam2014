@@ -52,6 +52,7 @@
      <Compile Include="Assets\AIRoman.cs" />
      <Compile Include="Assets\AIVitring.cs" />
      <Compile Include="Assets\Dude.cs" />
+     <Compile Include="Assets\Ending.cs" />
      <Compile Include="Assets\EventEngine.cs" />
      <Compile Include="Assets\Faction.cs" />
      <Compile Include="Assets\FixedFollowCam.cs" />

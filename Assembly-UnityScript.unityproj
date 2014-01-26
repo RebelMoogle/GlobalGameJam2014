@@ -50,6 +50,7 @@
      <Compile Include="Assets\Content\pauseMenu.js" />
      <Compile Include="Assets\HUD.js" />
      <Compile Include="Assets\NewBehaviourScript.js" />
+     <Compile Include="Assets\Resources\2dArt\endingText.js" />
      <Compile Include="Assets\playIntroMusic.js" />
      <None Include="Assets\Prefabs\BumpSpecRim.shader" />
   </ItemGroup>
