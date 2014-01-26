@@ -58,33 +58,6 @@ public class InputHandler : MonoBehaviour {
 			direction.z += 1.0f;
 		}
 
-		// Now check the second axis for the facing!
-		bool facingInputRecieved = false;
-		Vector3 facingDirection = Vector3.zero;
-
-		float xAxis = Input.GetAxis("Horizontal2");
-		float yAxis = Input.GetAxis("Vertical2");
-
-		// Determine the angle of the thumbstick
-		if( xAxis <= -0.2 || xAxis > 0.2f ) 
-	    {
-			facingInputRecieved = true;
-		}
-		else
-		{
-			xAxis = 0.0f;
-		}
-
-		if( yAxis <= -0.2 || yAxis > 0.2f ) 
-		{
-			facingInputRecieved = true;
-		}
-		else
-		{
-			yAxis = 0.0f;
-		}
-		
-
 		if(Input.GetButtonDown("KillAction"))
 			OnKillAction();
 
@@ -97,12 +70,6 @@ public class InputHandler : MonoBehaviour {
 			OnNoMove();
 		}
 
-		if ( facingInputRecieved )
-		{
-			// Calculate the angle of the thumbstick
-			float angle = Mathf.Atan2(xAxis, yAxis) * Mathf.Rad2Deg;
-			OnFacingDirection(angle);
-		}
 
 		//MouseUpdate();
 	}
