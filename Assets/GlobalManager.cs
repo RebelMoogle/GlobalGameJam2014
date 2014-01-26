@@ -26,7 +26,7 @@ public class GlobalManager : MonoBehaviour {
         if (!_isInstatiated)
         {
             // initialize opinions
-            factionOpinion[FactionType.ROMAN] = 1;
+            factionOpinion[FactionType.ROMAN] = 0; // originally 1
             factionOpinion[FactionType.VIKING] = -1;
             factionOpinion[FactionType.ROBIN] = 0;
             factionOpinion[FactionType.PLAYER] = 0;
@@ -41,6 +41,7 @@ public class GlobalManager : MonoBehaviour {
                 increment(factionKillCounts, dude.tag);
             };
             _isInstatiated = true;
+            LibsAI.startEventListeners();
         }
     }
 
@@ -62,11 +63,8 @@ public class GlobalManager : MonoBehaviour {
         dict[key] += 1;
     }
 
-    public static void worseOpinion(FactionType faction, float magnitude)
+    public static void modifyOpinion(FactionType faction, float change)
     {
-    }
-
-    public static void betterOpinion(FactionType faction, float magnitude)
-    {
+        factionOpinion[faction] += change;
     }
 }

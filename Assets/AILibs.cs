@@ -4,6 +4,25 @@ using System.Collections;
 // A class for AI logic
 public static class LibsAI {
 
+    public static void startEventListeners()
+    {
+        Weapon.playerKilledEnemy += (dude) =>
+        {
+            switch (getFactionType(dude))
+            {
+                case FactionType.ROMAN:
+                    AIRoman.OnDeath(dude);
+                    break;
+                case FactionType.VIKING:
+                    AIVitring.OnDeath(dude);
+                    break;
+                case FactionType.ROBIN:
+                    AIRobin.OnDeath(dude);
+                    break;
+            }
+        };
+    }
+
     public static FactionType getFactionType(Dude dude)
     {
         switch(dude.tag) {
