@@ -14,6 +14,7 @@ public class Dude : MonoBehaviour
 
 	private static List<Dude> _allDudes;
     public static Dude player;
+    public static bool playerDied = false;
 
 	private const float _stoppingDistance = 0.2f;
 	private const float _stoppingDistanceSqr = _stoppingDistance * _stoppingDistance;
@@ -418,10 +419,12 @@ public class Dude : MonoBehaviour
     void OnDestroy()
     {
         _allDudes.Remove(this);
+        if (this.isPlayer)
+        {
+            Dude.player = null;
+            EventEngine.fireEvent("playerDies");
+        }
     }
-    // grab material applied
-    // material should just use a color 
-    // 
 
     void setStyle()
     {
