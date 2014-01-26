@@ -11,7 +11,7 @@ public static class AILibs {
                 return FactionType.ROMAN;
             case "VITRING":
                 return FactionType.VIKING;
-            case "ROBINHOODS":
+            case "ROBIN":
                 return FactionType.ROBIN;
         }
         return FactionType.PLAYER;

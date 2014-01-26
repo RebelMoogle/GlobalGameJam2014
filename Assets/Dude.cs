@@ -582,7 +582,12 @@ void Start ()
 
 	internal void OnReceivedInfluence()
 	{
-		Debug.Log (name + " got influence.  Yuske Do stuff here");
+        var faction = this.GetComponent<Faction>();
+        if (!GameManager.gameEnded && faction != null && faction.onInfluence != null)
+        {
+            Debug.Log("influence recieved!");
+            faction.onInfluence(this);
+        }
 	}
 
     void OnDestroy()
