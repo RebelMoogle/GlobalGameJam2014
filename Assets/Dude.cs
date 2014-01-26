@@ -40,6 +40,7 @@ public class Dude : MonoBehaviour
 	private float _attackTimer = 0.0f;
 
 	public float _influenceDelay = 0.3f;
+	public ParticleSystem influenceParticles;
 	// default the time to last attack at the attack delay so the character can attack
 	private float _timeSinceLastInfluence = 0.3f; 
 	private const float _influenceDuration = 0.3f;
@@ -277,6 +278,13 @@ void Start ()
 			{
 				if ( _timeSinceLastInfluence > _influenceDelay )
 				{
+					if(influenceParticles != null)
+					{
+						ParticleSystem particleClone;
+						particleClone = (ParticleSystem)Instantiate(influenceParticles, transform.position, Quaternion.AngleAxis(-90, Vector3.right));
+						Destroy(particleClone.gameObject, particleClone.duration);
+					}
+
 					_influenceTimer = 0.0f;
 					RaycastHit hit;
 					Ray ray = new Ray(transform.position + (transform.forward * 0.5f), transform.forward);
