@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour {
     public AudioSource deadSound;
@@ -20,9 +21,16 @@ public class GameManager : MonoBehaviour {
         // check if only player remains
         if (Dude.allDudes.Count == 1 && Dude.player != null)
         {
-            if (PlayerStats.kills > 0)
+            if (PlayerStats.kills > 0 )
             {
-                // aggressive ending
+                if (PlayerStats.kills * 1.0f / Dude.totalDudes > 0.5f)
+                {
+                    // aggressive ending
+                }
+                else
+                {
+                    // opportunist ending
+                }
             }
             else
             {
@@ -30,6 +38,14 @@ public class GameManager : MonoBehaviour {
             }
         }
         // only one faction remains
-        // Dude.faction remainingFaction = null;
+        var existingFactions = new HashSet<Dude.faction>();
+        foreach (var dude in Dude.allDudes)
+        {
+            existingFactions.Add(dude.Faction);
+        }
+        if (existingFactions.Count > 2)
+        {
+            // one faction lives ending
+        }
 	}
 }

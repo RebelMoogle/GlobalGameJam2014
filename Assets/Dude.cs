@@ -14,7 +14,8 @@ public class Dude : MonoBehaviour
 
     // events
     public static event EventEngine.Event playerDies;
-    
+
+    public static int totalDudes = 0;
 	public static List<Dude> allDudes;
     public static Dude player;
     public static bool playerDied = false;
@@ -37,6 +38,7 @@ public class Dude : MonoBehaviour
 
     public enum faction
     {
+        PLAYER,
         RED,
         BLUE
     }
@@ -135,6 +137,7 @@ public class Dude : MonoBehaviour
                 _input.KillAction += OnKillAction;
 			}
 		}
+        totalDudes = allDudes.Count;
 	}
 	
 	// Update is called once per frame
@@ -427,7 +430,9 @@ public class Dude : MonoBehaviour
         if (this.isPlayer)
         {
             Dude.player = null;
-            playerDies();
+            if (playerDies != null) { 
+                playerDies(); 
+            }
         }
     }
 

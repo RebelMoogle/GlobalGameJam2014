@@ -5,6 +5,11 @@ public class PlayerStats : MonoBehaviour {
 
     public static int kills = 0;
 
+    void Awake()
+    {
+        kills = 0;
+    }
+
 	// Use this for initialization
 	void Start () {
         Weapon.playerKilledEnemy += () => { 

@@ -23,7 +23,7 @@ public class Weapon : MonoBehaviour {
         {
             if (owner == Dude.player)
             {
-                playerKilledEnemy();
+                if (playerKilledEnemy != null) { playerKilledEnemy(); }
             }
             dude.OnReceivedAttack();
         }
