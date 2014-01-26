@@ -3,6 +3,9 @@ using System.Collections;
 
 public class Weapon : MonoBehaviour {
 
+    public Dude owner;
+    public static event EventEngine.Event playerKilledEnemy;
+
 	// Use this for initialization
 	void Start () {
 	
@@ -18,6 +21,10 @@ public class Weapon : MonoBehaviour {
         var dude = collision.collider.GetComponent<Dude>();
         if (dude != null)
         {
+            if (owner == Dude.player)
+            {
+                playerKilledEnemy();
+            }
             dude.OnReceivedAttack();
         }
     }

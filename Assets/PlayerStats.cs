@@ -1,13 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
 
-public class EventEngine : MonoBehaviour {
+public class PlayerStats : MonoBehaviour {
 
-    public delegate void Event();
+    public static int kills = 0;
 
 	// Use this for initialization
 	void Start () {
+        Weapon.playerKilledEnemy += () => { 
+            kills++; 
+        };
 	}
 	
 	// Update is called once per frame

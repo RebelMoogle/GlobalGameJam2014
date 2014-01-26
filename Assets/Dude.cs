@@ -12,7 +12,10 @@ public class Dude : MonoBehaviour
     // range that two members of the same faction has to be in to swarm.
     public float swarmRange = 2f;
 
-	private static List<Dude> _allDudes;
+    // events
+    public static event EventEngine.Event playerDies;
+    
+	public static List<Dude> allDudes;
     public static Dude player;
     public static bool playerDied = false;
 
@@ -66,11 +69,11 @@ public class Dude : MonoBehaviour
 	void Awake()
 	{
 		_receivedInput = false;
-		if ( _allDudes == null )
+		if ( allDudes == null )
 		{
-			_allDudes = new List<Dude>();
+			allDudes = new List<Dude>();
 		}
-		_allDudes.Add (this);
+		allDudes.Add (this);
         if (this.isPlayer)
         {
             player = this;
@@ -85,6 +88,7 @@ public class Dude : MonoBehaviour
 				_weapon = weaponGO.GetComponent<Weapon>();
 				if ( _weapon != null )
 				{
+                    _weapon.owner = this;
 					_weapon.transform.parent = transform;
 					_weapon.transform.forward = transform.forward;
 					_weapon.transform.localPosition = new Vector3(0.0f, 0.0f, 1.0f);
@@ -359,7 +363,7 @@ public class Dude : MonoBehaviour
     Dude findNearestEnemy(float maxRange)
     {
         Dude nearestEnemy = null;
-        foreach (var dude in _allDudes)
+        foreach (var dude in allDudes)
         {
             if (dude.Faction != Faction)
             {
@@ -383,7 +387,7 @@ public class Dude : MonoBehaviour
             Vector3 closestAllyPosition = Vector3.zero;
             // minimum distance before swarming
             float closestAllyDist = 3f;
-            foreach (var dude in _allDudes)
+            foreach (var dude in allDudes)
             {
                 if (Faction == dude.Faction && dude != this)
                 {
@@ -418,11 +422,11 @@ public class Dude : MonoBehaviour
 
     void OnDestroy()
     {
-        _allDudes.Remove(this);
+        allDudes.Remove(this);
         if (this.isPlayer)
         {
             Dude.player = null;
-            EventEngine.fireEvent("playerDies");
+            playerDies();
         }
     }
 
