@@ -3,6 +3,8 @@ using System.Collections;
 
 public class LevelOver : MonoBehaviour {
 
+    public static string nextLevel = null;
+
     public enum victoryType
     {
         AGGRESSIVE,
@@ -21,6 +23,14 @@ public class LevelOver : MonoBehaviour {
         var text = this.GetComponent<GUIText>();
         text.text = buildLevelOverString();
 	}
+
+    void OnGUI() {
+        GUILayout.BeginArea(new Rect(15, 30, 100, 500));
+        if(GUILayout.Button("Next Level", GUILayout.Height(50))) {
+            Debug.Log("NEXT LEVEL");
+        }
+        GUILayout.EndArea();
+    }
 
     public string buildLevelOverString()
     {
