@@ -8,7 +8,10 @@ public class GameManager : MonoBehaviour {
 	void Start () {
         EventEngine.listenToEvent("playerDies", () =>
         {
-            deadSound.Play();
+            if (deadSound != null)
+            {
+                deadSound.Play();
+            }
         });
 	}
 	
