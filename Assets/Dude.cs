@@ -59,6 +59,8 @@ public class Dude : MonoBehaviour
 
 	public GameObject _weaponPrefab;
 	private Weapon _weapon;
+	public GameObject _influencerPrefab;
+	private influenceSphere _influencer;
 
 	void Awake()
 	{
@@ -109,16 +111,52 @@ public class Dude : MonoBehaviour
 		{
 			Debug.Log("[Dude] Weapon prefab not set on " + this.name + " ", this);
 		}
-	}
 
-
-	// Use this for initialization
-	void Start () 
+	// Load the influencer!
+	if ( _influencerPrefab != null )
 	{
-		_targetPosition = transform.position;
+		GameObject influencerGO = (GameObject)Instantiate(_influencerPrefab);
+		if ( influencerGO != null )
+		{
+			_influencer = influencerGO.GetComponent<influenceSphere>();
+			if ( _influencer != null )
+			{
+				_influencer.owner = this;
+				_influencer.transform.parent = transform;
+				_influencer.transform.forward = transform.forward;
+				_influencer.transform.localPosition = new Vector3(0.0f, 0.0f, 1.0f);
+				if (isPlayer) {
+					// GIANT SWORD WHAT
+					_influencer.transform.localScale *= 3;
+					_influencer.transform.localPosition = 
+						_influencer.transform.localPosition += new Vector3(0.0f, 0.0f, 2.0f);
+				}
+				
+				_influencer.gameObject.SetActive(false);
+			}
+			else
+			{
+				Debug.LogError("[Dude] Sphere prefab does not contain a weapon script", this);
+			}
+		}
+		else
+		{
+				Debug.LogError("[Dude] Failed to loadsphere prefab", this);
+		}
+	}
+	else
+	{
+			Debug.Log("[Dude] Sphere prefab not set on " + this.name + " ", this);
+	}
+}
 
-		// Only the player needs to hook up the input controller
-		if ( isPlayer )
+// Use this for initialization
+void Start () 
+{
+	_targetPosition = transform.position;
+	
+	// Only the player needs to hook up the input controller
+	if ( isPlayer )
 		{
 
 			_input = GetComponent<InputHandler>();
@@ -128,6 +166,7 @@ public class Dude : MonoBehaviour
 				_input.MoveDirection += OnMovementDirection;
 				_input.FacingDirection += OnFacingDirection;
                 _input.KillAction += OnKillAction;
+				_input.InfluenceAction += OnInfluenceAction;
 			}
 		}
 
@@ -166,6 +205,21 @@ public class Dude : MonoBehaviour
 			}
 		}
 
+	}
+
+	void StartInfluencing()
+	{
+		if ( _influencer != null )
+		{
+			if ( !_influencer.gameObject.activeInHierarchy )
+			{
+				if ( _timeSinceLastAttack > _attackDelay )
+				{
+					_attackTimer = 0.0f;
+					_influencer.gameObject.SetActive(true);
+				}
+			}
+		}
 	}
 	void UpdateAttacking()
 	{
@@ -290,6 +344,14 @@ public class Dude : MonoBehaviour
 			StartAttacking();
 		}
     }
+
+	void OnInfluenceAction(GameObject e)
+	{
+		if (isPlayer) 
+		{
+			StartInfluencing();
+		}
+	}
 
 	void FaceDirection(float angle)
 	{

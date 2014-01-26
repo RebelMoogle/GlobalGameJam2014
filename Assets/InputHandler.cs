@@ -7,6 +7,7 @@ public class InputHandler : MonoBehaviour {
 
 	public delegate void EventHandler();
 	public delegate void KillEventHandler(GameObject e);
+	public delegate void InfluenceEventHandler(GameObject e);
 	public delegate void DirectionEventHandler(Vector3 direction);
 	public delegate void FacingEventHandler(float angle);
 
@@ -18,6 +19,7 @@ public class InputHandler : MonoBehaviour {
 	public event FacingEventHandler FacingDirection;
 	public event EventHandler NoMove;
 	public event KillEventHandler KillAction;
+	public event InfluenceEventHandler InfluenceAction;
 
 	bool isMoving = false;
 
@@ -80,6 +82,9 @@ public class InputHandler : MonoBehaviour {
 		if(Input.GetButtonDown("KillAction"))
 			OnKillAction();
 
+		if(Input.GetButtonDown ("InfluenceAction"))
+		   OnInfluenceAction();
+
 		if ( dirInputRecieved )
 		{
 			direction.Normalize();
@@ -141,6 +146,12 @@ public class InputHandler : MonoBehaviour {
 	{
 		if(KillAction != null)
 			KillAction(this.gameObject);
+	}
+
+	void OnInfluenceAction()
+	{
+		if (InfluenceAction != null)
+			InfluenceAction (this.gameObject);
 	}
 
 	public static Vector3 PlaneRayIntersection (Plane plane, Ray ray)
