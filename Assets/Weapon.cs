@@ -77,7 +77,7 @@ public class Weapon : MonoBehaviour {
         var dude = collision.collider.GetComponent<Dude>();
         if (dude != null && !dude.CompareTag(owner.tag))
         {
-            if (owner == Dude.player)
+            if (owner == Dude.player || !dude.CompareTag(owner.tag))
             {
                 if (playerKilledEnemy != null) { playerKilledEnemy(dude); }
             }
