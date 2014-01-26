@@ -54,10 +54,10 @@ public class GameManager : MonoBehaviour {
             {
                 existingFactions.Add(dude.Faction);
             }
-            if (existingFactions.Count > 2)
+            if (existingFactions.Count == 2)
             {
                 Debug.Log("ONLY ONE FACTION LIVES ENDING");
-                gameEnded = true;
+                // gameEnded = true;
                 // one faction lives ending
             }
         }
