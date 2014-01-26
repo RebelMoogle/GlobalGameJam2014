@@ -4,10 +4,12 @@ using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour {
     public AudioSource deadSound;
-    public static bool gameEnded = false;
+    public bool gameEnded = false;
+    public string nextLevel = null;
 
 	// Use this for initialization
 	void Start () {
+        LevelOver.nextLevel = nextLevel;
         Dude.playerDies += () =>
         {
             if (!gameEnded)
@@ -82,7 +84,14 @@ public class GameManager : MonoBehaviour {
         else
         {
             LevelOver.kills = PlayerStats.kills;
-            Application.LoadLevel("LevelOver");
+            if (nextLevel == null || nextLevel.Equals(""))
+            {
+                Application.LoadLevel("Ending");
+            }
+            else
+            {
+                Application.LoadLevel("LevelOver");
+            }
         }
 	}
 }

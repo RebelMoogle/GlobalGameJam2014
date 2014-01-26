@@ -26,8 +26,11 @@ public class LevelOver : MonoBehaviour {
 
     void OnGUI() {
         GUILayout.BeginArea(new Rect(15, 30, 100, 500));
-        if(GUILayout.Button("Next Level", GUILayout.Height(50))) {
-            Debug.Log("NEXT LEVEL");
+        if (nextLevel != null)
+        {
+            if(GUILayout.Button("Next Level", GUILayout.Height(50))) {
+                Application.LoadLevel(nextLevel);
+            }
         }
         GUILayout.EndArea();
     }
