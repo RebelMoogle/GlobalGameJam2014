@@ -81,6 +81,23 @@ public class GameManager : MonoBehaviour {
                 }
                 // one faction lives ending
             }
+            else
+            {
+                bool dislikes = false;
+                foreach (var faction in existingFactions)
+                {
+                    if (AILibs.factionDislikesPlayer(faction))
+                    {
+                        dislikes = true;
+                    }
+                }
+                if (!dislikes)
+                {
+                    LevelOver.VictoryType = LevelOver.victoryType.NICE;
+                    LevelOver.won = true;
+                    gameEnded = true;
+                }
+            }
         }
         else
         {

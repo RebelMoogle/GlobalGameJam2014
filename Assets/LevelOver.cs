@@ -10,7 +10,8 @@ public class LevelOver : MonoBehaviour {
         AGGRESSIVE,
         OPPORTUNIST,
         PASSIVE,
-        HELPFUL
+        HELPFUL,
+        NICE
     };
 
     public static int kills = 0;
@@ -55,6 +56,9 @@ public class LevelOver : MonoBehaviour {
                     break;
                 case victoryType.HELPFUL:
                     detailString = "You sided with the strong.";
+                    break;
+                case victoryType.NICE:
+                    detailString = "You promoted peace between the factions.";
                     break;
             }
             levelOverString += detailString + "\n";
