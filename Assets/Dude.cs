@@ -29,6 +29,8 @@ public class Dude : MonoBehaviour
 	private const float _attackDuration = 0.3f;
 	private float _attackTimer = 0.0f;
 
+	bool _receivedInput;
+
     public enum faction
     {
         RED,
@@ -62,6 +64,7 @@ public class Dude : MonoBehaviour
 
 	void Awake()
 	{
+		_receivedInput = false;
 		if ( _allDudes == null )
 		{
 			_allDudes = new List<Dude>();
@@ -118,10 +121,11 @@ public class Dude : MonoBehaviour
 			if ( _input != null )
 			{
 
-				_input.MoveDown += OnMovementDown;
-				_input.MoveUp += OnMovementUp;
-				_input.MoveLeft += OnMovementLeft;
-				_input.MoveRight += OnMovementRight;
+//				_input.MoveDown += OnMovementDown;
+//				_input.MoveUp += OnMovementUp;
+//				_input.MoveLeft += OnMovementLeft;
+//				_input.MoveRight += OnMovementRight;
+				_input.MoveDirection += OnMovementDirection;
                 _input.KillAction += OnKillAction;
 			}
 		}
@@ -236,33 +240,44 @@ public class Dude : MonoBehaviour
         }
     }
 
-	void OnMovementDown(GameObject e)
+	void OnMovementDown()
 	{
 		Vector3 target = transform.position + new Vector3(0.0f, 0.0f, -1.0f);
 		MoveTowards(target);
 		Debug.Log("Down InputRecieved!",this);
 	}
-	void OnMovementUp(GameObject e)
+	void OnMovementUp()
 	{
 		Vector3 target = transform.position + new Vector3(0.0f, 0.0f, 1.0f);
 		MoveTowards(target);
 		Debug.Log(" Up InputRecieved!",this);
 	}
-	void OnMovementLeft(GameObject e)
+	void OnMovementLeft()
 	{
 		Vector3 target = transform.position + new Vector3(-1.0f, 0.0f, 0.0f);
 		MoveTowards(target);
 		Debug.Log("Left InputRecieved!",this);
 	}
-	void OnMovementRight(GameObject e)
+	void OnMovementRight()
 	{
 		Vector3 target = transform.position + new Vector3(1.0f, 0.0f, 0.0f);
 		MoveTowards(target);
 		Debug.Log("Right InputRecieved!",this);
 	}
 
-    void OnKillAction(GameObject e)
+	void OnMovementDirection( Vector3 unitDirection )
+	{
+		Vector3 target = transform.position + unitDirection;
+		MoveTowards(target);
+		Debug.Log("Directed Input Recieved",this);
+	}
+
+    void OnKillAction()
     {
+		if (isPlayer)
+		{
+			StartAttacking();
+		}
     }
 
 	void MoveTowards(Vector3 targetPosition)
@@ -421,6 +436,12 @@ public class Dude : MonoBehaviour
         }
         renderer.material.color = objectColor;
     }
+
+	void LateUpdate()
+	{
+		_receivedInput = false;
+	}
+
 
     void addJitter()
     {
