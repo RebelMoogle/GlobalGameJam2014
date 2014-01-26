@@ -6,6 +6,7 @@ using System.Collections;
 public class InputHandler : MonoBehaviour {
 
 	public delegate void EventHandler();
+	public delegate void KillEventHandler(GameObject e);
 	public delegate void DirectionEventHandler(Vector3 direction);
 
 	public event EventHandler MoveLeft;
@@ -13,7 +14,10 @@ public class InputHandler : MonoBehaviour {
 	public event EventHandler MoveUp;
 	public event EventHandler MoveDown;
 	public event DirectionEventHandler MoveDirection;
-	public event EventHandler KillAction;
+	public event EventHandler NoMove;
+	public event KillEventHandler KillAction;
+
+	bool isMoving = false;
 
 	// Use this for initialization
 	void Start () 
@@ -52,12 +56,19 @@ public class InputHandler : MonoBehaviour {
 			direction.z += 1.0f;
 		}
 
+
+
+
 		if(Input.GetButtonDown("KillAction"))
 			OnKillAction();
 
 		if ( inputRecieved )
 		{
-			MoveDirection(direction);
+			OnMoveDirection(direction);
+		}
+		else
+		{
+			OnNoMove();
 		}
 	}
 
@@ -91,9 +102,15 @@ public class InputHandler : MonoBehaviour {
 			MoveDirection(direction);
 	}
 
+	void OnNoMove ()
+	{
+		if(NoMove != null)
+			NoMove();
+	}
+
 	void OnKillAction()
 	{
 		if(KillAction != null)
-			KillAction();
+			KillAction(this.gameObject);
 	}
 }
