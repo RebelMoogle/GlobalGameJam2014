@@ -1,19 +1,23 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\GlobalManager.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Content\handleMenu.js">
     <Files>
-      <File FileName="Assets\GameManager.cs" Line="66" Column="1" />
+      <File FileName="Assets\GameManager.cs" Line="46" Column="9" />
       <File FileName="Assets\EventEngine.cs" Line="1" Column="1" />
-      <File FileName="Assets\Dude.cs" Line="505" Column="1" />
-      <File FileName="Assets\AIRoman.cs" Line="13" Column="1" />
-      <File FileName="Assets\Faction.cs" Line="110" Column="1" />
-      <File FileName="Assets\GlobalManager.cs" Line="68" Column="1" />
+      <File FileName="Assets\Dude.cs" Line="272" Column="1" />
+      <File FileName="Assets\AIRoman.cs" Line="16" Column="1" />
+      <File FileName="Assets\Faction.cs" Line="80" Column="41" />
+      <File FileName="Assets\GlobalManager.cs" Line="69" Column="2" />
+      <File FileName="Assets\Content\handleMenu.js" Line="1" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
-          <Node name="Assembly-CSharp" expanded="True">
-            <Node name="GlobalManager.cs" selected="True" />
+          <Node name="Assembly-CSharp" expanded="True" />
+          <Node name="Assembly-UnityScript" expanded="True">
+            <Node name="Content" expanded="True">
+              <Node name="handleMenu.js" selected="True" />
+            </Node>
           </Node>
         </State>
       </Pad>
@@ -27,8 +31,8 @@
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
-      <Breakpoint file="C:\Users\tsuts_000\Documents\GlobalGameJam2014\Assets\Dude.cs" line="246" />
       <Breakpoint file="C:\Users\tsuts_000\Documents\GlobalGameJam2014\Assets\AIRoman.cs" line="13" />
+      <Breakpoint file="C:\Users\tsuts_000\Documents\GlobalGameJam2014\Assets\Dude.cs" line="272" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />

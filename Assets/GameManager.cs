@@ -10,11 +10,15 @@ public class GameManager : MonoBehaviour {
 	void Start () {
         Dude.playerDies += () =>
         {
-            Debug.Log("YOU DIED");
-            gameEnded = true;
-            if (deadSound != null)
+            if (!gameEnded)
             {
-                deadSound.Play();
+                Debug.Log("YOU DIED");
+                LevelOver.won = false;
+                gameEnded = true;
+                if (deadSound != null)
+                {
+                    deadSound.Play();
+                }
             }
         };
 	}
@@ -31,12 +35,16 @@ public class GameManager : MonoBehaviour {
                     if (PlayerStats.kills * 1.0f / Dude.totalDudes > 0.5f)
                     {
                         Debug.Log("AGGRESSIVE ENDING");
+                        LevelOver.VictoryType = LevelOver.victoryType.AGGRESSIVE;
+                        LevelOver.won = true;
                         gameEnded = true;
                         // aggressive ending
                     }
                     else
                     {
                         Debug.Log("OPPORTUNIST ENDING");
+                        LevelOver.VictoryType = LevelOver.victoryType.OPPORTUNIST;
+                        LevelOver.won = true;
                         gameEnded = true;
                         // opportunist ending
                     }
@@ -44,6 +52,8 @@ public class GameManager : MonoBehaviour {
                 else
                 {
                     Debug.Log("PASSIVE ENDING");
+                    LevelOver.VictoryType = LevelOver.victoryType.PASSIVE;
+                    LevelOver.won = true;
                     gameEnded = true;
                     // passive ending
                 }
@@ -61,11 +71,18 @@ public class GameManager : MonoBehaviour {
                     if (faction != FactionType.PLAYER && AILibs.factionLikesPlayer(faction))
                     {
                         Debug.Log("ONLY ONE FACTION LIVES ENDING");
+                        LevelOver.VictoryType = LevelOver.victoryType.HELPFUL;
+                        LevelOver.won = true;
                         gameEnded = true;
                     }
                 }
                 // one faction lives ending
             }
+        }
+        else
+        {
+            LevelOver.kills = PlayerStats.kills;
+            Application.LoadLevel("LevelOver");
         }
 	}
 }

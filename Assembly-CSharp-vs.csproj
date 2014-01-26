@@ -58,6 +58,7 @@
      <Compile Include="Assets\GameManager.cs" />
      <Compile Include="Assets\GlobalManager.cs" />
      <Compile Include="Assets\InputHandler.cs" />
+     <Compile Include="Assets\LevelOver.cs" />
      <Compile Include="Assets\PlayerStats.cs" />
      <Compile Include="Assets\Weapon.cs" />
      <Compile Include="Assets\influenceSphere.cs" />
