@@ -94,6 +94,12 @@ public class Dude : MonoBehaviour
 					_weapon.transform.parent = transform;
 					_weapon.transform.forward = transform.forward;
 					_weapon.transform.localPosition = new Vector3(0.0f, 0.0f, 1.0f);
+                    if (isPlayer) {
+                        // GIANT SWORD WHAT
+                        _weapon.transform.localScale *= 3;
+                        _weapon.transform.localPosition = 
+                            _weapon.transform.localPosition += new Vector3(0.0f, 0.0f, 2.0f);
+                    }
 
 					_weapon.gameObject.SetActive(false);
 				}
