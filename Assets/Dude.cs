@@ -9,6 +9,7 @@ public class Dude : MonoBehaviour
     public float jitterMagnitude = 0.05f; // maximum jitter range
     public float detectPlayerRange = 1f; // range that an enemyDetects a player
     public float detectEnemyRange = 2f;
+    public float playerInfluenceFactor = 5f;
     // range that two members of the same faction has to be in to swarm.
     public float swarmRange = 2f;
 
@@ -268,7 +269,7 @@ void Start ()
         var faction = AILibs.getFactionType(this);
         var factionOpinion = GlobalManager.factionOpinion[AILibs.getFactionType(this)];
         Dude nearestEnemy = findNearestEnemy(detectEnemyRange);
-        bool playerWithinRange = Dude.player != null && Vector3.Distance(transform.position, Dude.player.transform.position) * Mathf.Abs(factionOpinion) < detectPlayerRange;
+        bool playerWithinRange = Dude.player != null && Vector3.Distance(transform.position, Dude.player.transform.position) * Mathf.Abs(factionOpinion) < detectPlayerRange * playerInfluenceFactor;
         if (AILibs.factionDislikesPlayer(faction) && playerWithinRange) {
             MoveTowardsPlayer();
         } else if (nearestEnemy != null) {

@@ -13,6 +13,8 @@ public class Faction : MonoBehaviour {
 
 	[SerializeField]
 	FactionType currentType = FactionType.ROMAN;
+    public float romanPlayerInfluence = 2f;
+    public float vikingPlayerInfluence = 5f;
 
 	public FactionType CurrentType {
 		get {
@@ -62,6 +64,7 @@ public class Faction : MonoBehaviour {
 		{
             dude.detectEnemyRange = 2f;
             dude.detectPlayerRange = 3f;
+            dude.playerInfluenceFactor = romanPlayerInfluence;
 			if(currentClone != null)
 				Destroy(currentClone);
 
@@ -79,6 +82,7 @@ public class Faction : MonoBehaviour {
 		{
             dude.detectEnemyRange = 10f;
             dude.detectPlayerRange = 2f;
+            dude.playerInfluenceFactor = vikingPlayerInfluence;
 			if(currentClone != null)
 				Destroy(currentClone);
 
