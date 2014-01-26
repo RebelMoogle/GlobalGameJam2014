@@ -268,7 +268,7 @@ void Start ()
         var faction = AILibs.getFactionType(this);
         var factionOpinion = GlobalManager.factionOpinion[AILibs.getFactionType(this)];
         Dude nearestEnemy = findNearestEnemy(detectEnemyRange);
-        bool playerWithinRange = Vector3.Distance(transform.position, Dude.player.transform.position) * Mathf.Abs(factionOpinion) < detectPlayerRange;
+        bool playerWithinRange = Dude.player != null && Vector3.Distance(transform.position, Dude.player.transform.position) * Mathf.Abs(factionOpinion) < detectPlayerRange;
         if (AILibs.factionDislikesPlayer(faction) && playerWithinRange) {
             MoveTowardsPlayer();
         } else if (nearestEnemy != null) {
