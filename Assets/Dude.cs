@@ -8,11 +8,13 @@ public class Dude : MonoBehaviour
     // configurable parameters
     public float jitterMagnitude = 0.05f; // maximum jitter range
     public float detectPlayerRange = 1f; // range that an enemyDetects a player
+    public float detectEnemyRange = 2f;
     // range that two members of the same faction has to be in to swarm.
     public float swarmRange = 2f;
 
 	private static List<Dude> _allDudes;
     public static Dude player;
+    public static bool playerDied = false;
 
 	private const float _stoppingDistance = 0.2f;
 	private const float _stoppingDistanceSqr = _stoppingDistance * _stoppingDistance;
@@ -40,6 +42,7 @@ public class Dude : MonoBehaviour
         IDLE,
         RUNNING_IN_CIRCLES,
         MOVE_TOWARD_PLAYER,
+        MOVE_TOWARD_CLOSEST_ENEMY,
         SWARM
     }
 
@@ -47,7 +50,7 @@ public class Dude : MonoBehaviour
 	public bool isPlayer;
 
     // action if not a player
-    public action Action = action.IDLE;
+    private action Action = action.IDLE;
     // faction the player belongs to
     public faction Faction = faction.BLUE;
 
@@ -202,40 +205,39 @@ public class Dude : MonoBehaviour
         // here's my rudimentary AI
         // if the player is close, move towards him.
         // otherwise, swarm!
+        Dude nearestEnemy = findNearestEnemy(detectEnemyRange);
         if (player != null && Vector3.Distance(transform.position, player.transform.position) < detectPlayerRange)
         {
-            Action = action.MOVE_TOWARD_PLAYER;
+            MoveTowardsPlayer();
         }
-        else
+        else if (nearestEnemy != null)
         {
-            Action = action.SWARM;
+            MoveTowards(nearestEnemy.transform.position);
+        } 
+        else 
+        {
+            SwarmToFaction();
         }
 
         // Attack if close enough
-
-        if (Dude.player != null)
-        {
-            if (Vector3.Distance(transform.position, Dude.player.transform.position) < _attackDistance)
-            {
-                StartAttacking();
+        var closestDistance = _attackDistance + 1;
+        if (Dude.player != null) {
+            var playerDistance = Vector3.Distance(transform.position, Dude.player.transform.position);
+            if (playerDistance < closestDistance) {
+                closestDistance = playerDistance;
             }
         }
 
-        // actual actions enacted
-        switch (Action)
+        if (nearestEnemy != null) {
+            var playerDistance = Vector3.Distance(transform.position, nearestEnemy.transform.position);
+            if (playerDistance < closestDistance) {
+                closestDistance = playerDistance;
+            }
+        }
+
+        if (closestDistance < _attackDistance)
         {
-            case action.RUNNING_IN_CIRCLES:
-                RunInCircles();
-                break;
-            case action.MOVE_TOWARD_PLAYER:
-                MoveTowardsPlayer();
-                break;
-            case action.SWARM:
-                SwarmToFaction();
-                break;
-            default: // idle 
-                Idle();
-                break;
+            StartAttacking();
         }
     }
 
@@ -347,11 +349,29 @@ public class Dude : MonoBehaviour
     {
         if (!_moving)
         {
-			if ( Dude.player != null )
+			if (Dude.player != null)
 			{
             	MoveTowards(Dude.player.transform.position);
 			}
         }
+    }
+
+    Dude findNearestEnemy(float maxRange)
+    {
+        Dude nearestEnemy = null;
+        foreach (var dude in _allDudes)
+        {
+            if (dude.Faction != Faction)
+            {
+                var distance = Vector3.Distance(transform.position, dude.transform.position);
+                if (distance < maxRange)
+                {
+                    maxRange = distance;
+                    nearestEnemy = dude;
+                }
+            }
+        }
+        return nearestEnemy;
     }
 
     // swarming
@@ -399,10 +419,12 @@ public class Dude : MonoBehaviour
     void OnDestroy()
     {
         _allDudes.Remove(this);
+        if (this.isPlayer)
+        {
+            Dude.player = null;
+            EventEngine.fireEvent("playerDies");
+        }
     }
-    // grab material applied
-    // material should just use a color 
-    // 
 
     void setStyle()
     {
