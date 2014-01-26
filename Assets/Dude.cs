@@ -265,10 +265,10 @@ void Start ()
         // here's my rudimentary AI
         // if the player is close, move towards him.
         // otherwise, swarm!
-        var faction = LibsAI.getFactionType(this);
-        var factionOpinion = GlobalManager.factionOpinion[LibsAI.getFactionType(this)];
+        var faction = AILibs.getFactionType(this);
+        var factionOpinion = GlobalManager.factionOpinion[AILibs.getFactionType(this)];
         Dude nearestEnemy = findNearestEnemy(detectEnemyRange);
-        if (LibsAI.factionLikesPlayer(faction) || LibsAI.factionDislikesPlayer(faction) &&
+        if (AILibs.factionLikesPlayer(faction) || AILibs.factionDislikesPlayer(faction) &&
             (player != null && Vector3.Distance(transform.position, player.transform.position) < detectPlayerRange)) {
             MoveTowardsPlayer();
         } else if (nearestEnemy != null)
@@ -281,7 +281,7 @@ void Start ()
 
         // Attack if close enough
         var closestDistance = _attackDistance + 1;
-        if (Dude.player != null && LibsAI.factionDislikesPlayer(faction)) {
+        if (Dude.player != null && AILibs.factionDislikesPlayer(faction)) {
             var playerDistance = Vector3.Distance(transform.position, Dude.player.transform.position);
             if (playerDistance < closestDistance) {
                 closestDistance = playerDistance;
@@ -393,6 +393,7 @@ void Start ()
 				float distanceCovered = _journeyTime * _speed;
 				float fractionCovered = distanceCovered / _journeyLength;
 				transform.position = Vector3.Lerp(_startingPosition, _targetPosition, fractionCovered);
+                transform.LookAt(_targetPosition);
 	            // add jitter if an AI
 	            if (!isPlayer)
 	            {

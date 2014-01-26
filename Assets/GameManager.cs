@@ -49,15 +49,21 @@ public class GameManager : MonoBehaviour {
                 }
             }
             // only one faction remains
-            var existingFactions = new HashSet<string>();
+            var existingFactions = new HashSet<FactionType>();
             foreach (var dude in Dude.allDudes)
             {
-                existingFactions.Add(dude.gameObject.tag);
+                existingFactions.Add(AILibs.getFactionType(dude));
             }
             if (existingFactions.Count == 2)
             {
-                Debug.Log("ONLY ONE FACTION LIVES ENDING");
-                // gameEnded = true;
+                foreach (var faction in existingFactions)
+                {
+                    if (faction != FactionType.PLAYER && AILibs.factionLikesPlayer(faction))
+                    {
+                        Debug.Log("ONLY ONE FACTION LIVES ENDING");
+                        gameEnded = true;
+                    }
+                }
                 // one faction lives ending
             }
         }

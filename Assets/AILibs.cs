@@ -2,7 +2,7 @@
 using System.Collections;
 
 // A class for AI logic
-public static class LibsAI {
+public static class AILibs {
 
     public static void startEventListeners()
     {
