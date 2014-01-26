@@ -49,10 +49,10 @@ public class GameManager : MonoBehaviour {
                 }
             }
             // only one faction remains
-            var existingFactions = new HashSet<Dude.faction>();
+            var existingFactions = new HashSet<string>();
             foreach (var dude in Dude.allDudes)
             {
-                existingFactions.Add(dude.Faction);
+                existingFactions.Add(dude.gameObject.tag);
             }
             if (existingFactions.Count == 2)
             {

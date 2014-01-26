@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-enum FactionType
+public enum FactionType
 {
 	ROMAN,
 	VIKING
@@ -10,7 +10,13 @@ enum FactionType
 public class Faction : MonoBehaviour {
 
 	[SerializeField]
-	FactionType currentType;
+	FactionType currentType = FactionType.ROMAN;
+
+	public FactionType CurrentType {
+		get {
+			return currentType;
+		}
+	}
 
 	string currentTag;
 
@@ -49,9 +55,9 @@ public class Faction : MonoBehaviour {
 //			return; // we are already the correct faction, we shall do nothing
 
 		// set tag
-		//this.tag = "";
 
 
+		currentType = newFaction;
         if(newFaction == FactionType.ROMAN)
 		{
 			if(currentClone != null)
@@ -62,6 +68,8 @@ public class Faction : MonoBehaviour {
 				currentClone = (GameObject)Instantiate(romanFab, this.transform.position, this.transform.rotation);
 				currentClone.transform.parent = transform;
 			}
+
+			this.tag = "ROMAN";
 			   
 		}
 		else
@@ -75,6 +83,7 @@ public class Faction : MonoBehaviour {
 				currentClone.transform.parent = transform;
 			}
 				
+			this.tag = "VITRING";
         }
 	}
 }

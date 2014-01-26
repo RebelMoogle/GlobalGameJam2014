@@ -36,12 +36,12 @@ public class Dude : MonoBehaviour
 
 	bool _receivedInput;
 
-    public enum faction
-    {
-        PLAYER,
-        RED,
-        BLUE
-    }
+//    public enum faction
+//    {
+//        PLAYER,
+//        RED,
+//        BLUE
+//    }
 
     public enum action {
         IDLE,
@@ -57,7 +57,7 @@ public class Dude : MonoBehaviour
     // action if not a player
     private action Action = action.IDLE;
     // faction the player belongs to
-    public faction Faction = faction.BLUE;
+   	Faction myFaction;
 
 	// move speed in units per second
 	public float _speed = 1.0f;
@@ -118,8 +118,10 @@ public class Dude : MonoBehaviour
 			Debug.Log("[Dude] Weapon prefab not set on " + this.name + " ", this);
 		}
 
-		if(renderer != null)
-		   setStyle();
+		myFaction = GetComponent<Faction>();
+
+//		if(renderer != null)
+//		   setStyle();
 	}
 
 
@@ -131,6 +133,7 @@ public class Dude : MonoBehaviour
 		// Only the player needs to hook up the input controller
 		if ( isPlayer )
 		{
+
 			_input = GetComponent<InputHandler>();
 			if ( _input != null )
 			{
@@ -143,15 +146,17 @@ public class Dude : MonoBehaviour
                 _input.KillAction += OnKillAction;
 			}
 		}
+
         totalDudes = allDudes.Count;
 	}
 	
 	// Update is called once per frame
+
 	void Update () 
 	{
         if (!isPlayer)
         {
-            AI();
+          AI();
         }
 		UpdateAttacking();
 	}
@@ -375,7 +380,7 @@ public class Dude : MonoBehaviour
         Dude nearestEnemy = null;
         foreach (var dude in allDudes)
         {
-            if (dude.Faction != Faction)
+			if (!dude.CompareTag(tag))
             {
                 var distance = Vector3.Distance(transform.position, dude.transform.position);
                 if (distance < maxRange)
@@ -399,7 +404,7 @@ public class Dude : MonoBehaviour
             float closestAllyDist = 3f;
             foreach (var dude in allDudes)
             {
-                if (Faction == dude.Faction && dude != this)
+                if (dude.CompareTag(tag) && dude != this)
                 {
                     var dist = Vector3.Distance(transform.position, dude.transform.position);
                     if (closestAllyDist == -1f || dist < closestAllyDist)
@@ -442,19 +447,19 @@ public class Dude : MonoBehaviour
         }
     }
 
-    void setStyle()
-    {
-        Color objectColor = Color.white;
-        switch(Faction) {
-            case faction.BLUE:
-                objectColor = Color.blue;
-                break;
-            case faction.RED:
-                objectColor = Color.red;
-                break;
-        }
-        renderer.material.color = objectColor;
-    }
+//    void setStyle()
+//    {
+//        Color objectColor = Color.white;
+//        switch(currentFaction) {
+//            case faction.BLUE:
+//                objectColor = Color.blue;
+//                break;
+//            case faction.RED:
+//                objectColor = Color.red;
+//                break;
+//        }
+//        renderer.material.color = objectColor;
+//    }
 
 	void LateUpdate()
 	{
@@ -469,4 +474,6 @@ public class Dude : MonoBehaviour
                                      Random.Range(-jitterMagnitude, jitterMagnitude));
         transform.position += jitter;
     }
+
+
 }
