@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour {
     public AudioSource deadSound;
-    public static boolean gameEnded = false;
+    public static bool gameEnded = false;
 
 	// Use this for initialization
 	void Start () {
