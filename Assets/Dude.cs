@@ -39,6 +39,14 @@ public class Dude : MonoBehaviour
 	private const float _attackDuration = 0.3f;
 	private float _attackTimer = 0.0f;
 
+	public float _influenceDelay = 0.3f;
+	// default the time to last attack at the attack delay so the character can attack
+	private float _timeSinceLastInfluence = 0.3f; 
+	private const float _influenceDuration = 0.3f;
+	private float _influenceTimer = 0.0f;
+
+
+
 	bool _receivedInput;
 
     public enum action {
@@ -61,7 +69,7 @@ public class Dude : MonoBehaviour
 	public GameObject _weaponPrefab;
 	private Weapon _weapon;
 	public GameObject _influencerPrefab;
-	private influenceSphere _influencer;
+	private Weapon _influencer;
 
 	void Awake()
 	{
@@ -121,7 +129,7 @@ public class Dude : MonoBehaviour
 		GameObject influencerGO = (GameObject)Instantiate(_influencerPrefab);
 		if ( influencerGO != null )
 		{
-			_influencer = influencerGO.GetComponent<influenceSphere>();
+			_influencer = influencerGO.GetComponent<Weapon>();
 			if ( _influencer != null )
 			{
 				_influencer.owner = this;
@@ -185,6 +193,7 @@ void Start ()
           AI();
         }
 		UpdateAttacking();
+		UpdateInfluence();
 
 		MouseUpdate();
 	}
@@ -226,20 +235,7 @@ void Start ()
 
 	}
 
-	void StartInfluencing()
-	{
-		if ( _influencer != null )
-		{
-			if ( !_influencer.gameObject.activeInHierarchy )
-			{
-				if ( _timeSinceLastAttack > _attackDelay )
-				{
-					_attackTimer = 0.0f;
-					_influencer.gameObject.SetActive(true);
-				}
-			}
-		}
-	}
+
 	void UpdateAttacking()
 	{
 		if( _weapon != null )
@@ -267,6 +263,67 @@ void Start ()
 		}
 		//else no weapon
 
+	}
+
+	void StartInfluencing()
+	{
+		if ( _influencer != null )
+		{
+			if ( !_influencer.gameObject.activeInHierarchy )
+			{
+				if ( _timeSinceLastInfluence > _influenceDelay )
+				{
+					_influenceTimer = 0.0f;
+					RaycastHit hit;
+					Ray ray = new Ray(transform.position + (transform.forward * 0.5f), transform.forward);
+					
+					if ( Physics.SphereCast(ray, 0.4f, out hit, 3.0f, 1<<9 ) )
+					{
+						Dude dude = hit.collider.GetComponent<Dude>();
+						if ( dude != null )
+						{
+							// don't hit self!
+							if ( dude != this )
+							{
+								dude.OnReceivedInfluence();
+							}
+							
+						}
+					}
+					_influencer.gameObject.SetActive(true);
+				}
+			}
+		}
+		
+	}
+
+	void UpdateInfluence()
+	{
+		if( _influencer != null )
+		{
+			if ( _influencer.gameObject.activeInHierarchy )
+			{
+				// Attacking!
+				if ( _influenceTimer < _influenceDuration )
+				{
+					_influenceTimer += Time.deltaTime;
+				}
+				else
+				{
+					// Done attacking
+					_influencer.gameObject.SetActive(false);
+					_timeSinceLastInfluence = 0.0f;
+					
+				}
+			}
+			else
+			{
+				// Done attacking!
+				_timeSinceLastInfluence += Time.deltaTime;
+			}
+		}
+		//else no influencer weapon
+		
 	}
 
 	void Influence()
@@ -522,6 +579,11 @@ void Start ()
     {
        Destroy(gameObject);
     }
+
+	internal void OnReceivedInfluence()
+	{
+		Debug.Log (name + " got influence.  Yuske Do stuff here");
+	}
 
     void OnDestroy()
     {
