@@ -27,6 +27,8 @@ public class Dude : MonoBehaviour
 	private Vector3 _startingPosition;
 	private Vector3 _targetPosition;
 	private bool _movingTowardsTarget = false;
+	private bool _movingInDirection = false;
+	private Vector3 _moveDirection;
 
 	// Attacking stuff
 	public float _attackDistance = 2.5f;
@@ -286,8 +288,8 @@ public class Dude : MonoBehaviour
 
 	void OnMovementDirection( Vector3 unitDirection )
 	{
-		Vector3 target = transform.position + unitDirection;
-		MoveTowardsTarget(target);
+		_movingInDirection = true;
+		_moveDirection = unitDirection;
 	}
 
 	void OnFacingDirection( float angle  )
@@ -327,21 +329,31 @@ public class Dude : MonoBehaviour
 
 	void UpdateMovement()
 	{
-		if( _movingTowardsTarget )
+		if ( isPlayer )
 		{
-
-			_journeyTime += Time.deltaTime;
-			float distanceCovered = _journeyTime * _speed;
-			float fractionCovered = distanceCovered / _journeyLength;
-			transform.position = Vector3.Lerp(_startingPosition, _targetPosition, fractionCovered);
-            // add jitter if an AI
-            if (!isPlayer)
-            {
-                addJitter();
-            }
-			if ( Vector3.SqrMagnitude( transform.position - _targetPosition ) <= _stoppingDistanceSqr )
+			if ( _movingInDirection )
 			{
-				_movingTowardsTarget = false;
+				transform.position += (Time.deltaTime * _speed * _moveDirection);
+				_movingInDirection = false;
+			}
+		}
+		else
+		{
+			if( _movingTowardsTarget )
+			{
+				_journeyTime += Time.deltaTime;
+				float distanceCovered = _journeyTime * _speed;
+				float fractionCovered = distanceCovered / _journeyLength;
+				transform.position = Vector3.Lerp(_startingPosition, _targetPosition, fractionCovered);
+	            // add jitter if an AI
+	            if (!isPlayer)
+	            {
+	                addJitter();
+	            }
+				if ( Vector3.SqrMagnitude( transform.position - _targetPosition ) <= _stoppingDistanceSqr )
+				{
+					_movingTowardsTarget = false;
+				}
 			}
 		}
 	}

@@ -33,29 +33,48 @@ public class InputHandler : MonoBehaviour {
 		bool dirInputRecieved = false;
 		Vector3 direction = Vector3.zero;
 
-		float axisVal = Input.GetAxis("Horizontal");
-		if( axisVal <= -0.2 || Input.GetKeyDown(KeyCode.A) )
-		{
-			dirInputRecieved = true;
-			direction.x += -1.0f;
-		}
-		else if ( axisVal >= 0.2 || Input.GetKeyDown(KeyCode.D) )
+		float axisVal = 0.0f;//Input.GetAxis("Horizontal");
+		if ( Input.GetKey(KeyCode.D) )
 		{
 			dirInputRecieved = true;
 			direction.x += 1.0f;
 		}
+		if ( Input.GetKey(KeyCode.A) )
+		{
+			dirInputRecieved = true;
+            direction.x += -1.0f;
+        }
+        if( axisVal <= -0.2 ) 
+		{
+			dirInputRecieved = true;
+			direction.x += -axisVal;
+		}
+		else if ( axisVal >= 0.2 )
+		{
+			dirInputRecieved = true;
+            direction.x += axisVal;
+		}
 
-		axisVal = Input.GetAxis("Vertical");
-
-		if( axisVal <= -0.2 || Input.GetKeyDown(KeyCode.S) )
+		axisVal = 0.0f;//Input.GetAxis("Vertical");
+		if ( Input.GetKey(KeyCode.S) )
 		{
 			dirInputRecieved = true;
 			direction.z += -1.0f;
 		}
-		else if( axisVal >= 0.2 || Input.GetKeyDown(KeyCode.W) )
+		if( Input.GetKey(KeyCode.W) )
 		{
 			dirInputRecieved = true;
-			direction.z += 1.0f;
+            direction.z += 1.0f;
+        }
+		if( axisVal <= -0.2 ) 
+		{
+			dirInputRecieved = true;
+			direction.z += -axisVal;
+		}
+		else if( axisVal >= 0.2 ) 
+		{
+			dirInputRecieved = true;
+			direction.z += axisVal;
 		}
 
 		if(Input.GetButtonDown("KillAction"))
@@ -63,6 +82,7 @@ public class InputHandler : MonoBehaviour {
 
 		if ( dirInputRecieved )
 		{
+			direction.Normalize();
 			OnMoveDirection(direction);
 		}
 		else
@@ -70,8 +90,6 @@ public class InputHandler : MonoBehaviour {
 			OnNoMove();
 		}
 
-
-		//MouseUpdate();
 	}
 
 	
