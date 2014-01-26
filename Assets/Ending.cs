@@ -31,27 +31,27 @@ public class Ending : MonoBehaviour {
         if (AILibs.factionLikesPlayer(FactionType.ROMAN)) {
             endingString += "\n" + romansLike + "\n";
         } else if (AILibs.factionDislikesPlayer(FactionType.ROMAN)) {
-            endingString += "\n" + romansNeutral + "\n";
-        } else {
             endingString += "\n" + romansDislike + "\n";
+        } else {
+            endingString += "\n" + romansNeutral + "\n";
         }
 
         // viking
         if (AILibs.factionLikesPlayer(FactionType.VIKING)) {
             endingString += "\n" + vikingsLike + "\n";
         } else if (AILibs.factionDislikesPlayer(FactionType.VIKING)) {
-            endingString += "\n" + vikingsNeutral + "\n";
-        } else {
             endingString += "\n" + vikingsDislike + "\n";
+        } else {
+            endingString += "\n" + vikingsNeutral + "\n";
         }
 
         // robin
         if (AILibs.factionLikesPlayer(FactionType.ROBIN)) {
             endingString += "\n" + robinLike + "\n";
         } else if (AILibs.factionDislikesPlayer(FactionType.ROBIN)) {
-            endingString += "\n" + robinNeutral + "\n";
-        } else {
             endingString += "\n" + robinDislike + "\n";
+        } else {
+            endingString += "\n" + robinNeutral + "\n";
         }
         return endingString;
     }

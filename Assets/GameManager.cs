@@ -4,11 +4,12 @@ using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour {
     public AudioSource deadSound;
-    public bool gameEnded = false;
+    public static bool gameEnded = false;
     public string nextLevel = null;
 
 	// Use this for initialization
 	void Start () {
+        gameEnded = false;
         LevelOver.nextLevel = nextLevel;
         Dude.playerDies += () =>
         {

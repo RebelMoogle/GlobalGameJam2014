@@ -538,7 +538,7 @@ void Start ()
             dudeDies(this);
         }
         var faction = this.GetComponent<Faction>();
-        if (faction != null && faction.onDeath != null)
+        if (!GameManager.gameEnded && faction != null && faction.onDeath != null)
         {
             faction.onDeath(this);
         }
