@@ -26,7 +26,7 @@ public class Dude : MonoBehaviour
 	private const float _stoppingDistanceSqr = _stoppingDistance * _stoppingDistance;
 	private Vector3 _startingPosition;
 	private Vector3 _targetPosition;
-	private bool _moving = false;
+	private bool _movingTowardsTarget = false;
 
 	// Attacking stuff
 	public float _attackDistance = 2.5f;
@@ -138,6 +138,7 @@ public class Dude : MonoBehaviour
 //				_input.MoveLeft += OnMovementLeft;
 //				_input.MoveRight += OnMovementRight;
 				_input.MoveDirection += OnMovementDirection;
+				_input.FacingDirection += OnFacingDirection;
                 _input.KillAction += OnKillAction;
 			}
 		}
@@ -154,6 +155,8 @@ public class Dude : MonoBehaviour
           AI();
         }
 		UpdateAttacking();
+
+		MouseUpdate();
 	}
 
     void FixedUpdate()
@@ -174,6 +177,7 @@ public class Dude : MonoBehaviour
 				}
 			}
 		}
+
 	}
 	void UpdateAttacking()
 	{
@@ -226,7 +230,7 @@ public class Dude : MonoBehaviour
         }
         else if (nearestEnemy != null)
         {
-            MoveTowards(nearestEnemy.transform.position);
+            MoveTowardsTarget(nearestEnemy.transform.position);
         } 
         else 
         {
@@ -258,32 +262,37 @@ public class Dude : MonoBehaviour
 	void OnMovementDown()
 	{
 		Vector3 target = transform.position + new Vector3(0.0f, 0.0f, -1.0f);
-		MoveTowards(target);
+		MoveTowardsTarget(target);
 		Debug.Log("Down InputRecieved!",this);
 	}
 	void OnMovementUp()
 	{
 		Vector3 target = transform.position + new Vector3(0.0f, 0.0f, 1.0f);
-		MoveTowards(target);
+		MoveTowardsTarget(target);
 		Debug.Log(" Up InputRecieved!",this);
 	}
 	void OnMovementLeft()
 	{
 		Vector3 target = transform.position + new Vector3(-1.0f, 0.0f, 0.0f);
-		MoveTowards(target);
+		MoveTowardsTarget(target);
 		Debug.Log("Left InputRecieved!",this);
 	}
 	void OnMovementRight()
 	{
 		Vector3 target = transform.position + new Vector3(1.0f, 0.0f, 0.0f);
-		MoveTowards(target);
+		MoveTowardsTarget(target);
 		Debug.Log("Right InputRecieved!",this);
 	}
 
 	void OnMovementDirection( Vector3 unitDirection )
 	{
 		Vector3 target = transform.position + unitDirection;
-		MoveTowards(target);
+		MoveTowardsTarget(target);
+	}
+
+	void OnFacingDirection( float angle  )
+	{
+		FaceDirection( angle );
 	}
 
     void OnKillAction(GameObject e)
@@ -294,7 +303,12 @@ public class Dude : MonoBehaviour
 		}
     }
 
-	void MoveTowards(Vector3 targetPosition)
+	void FaceDirection(float angle)
+	{
+		Debug.Log ("Angle " + angle);
+	}
+
+	void MoveTowardsTarget(Vector3 targetPosition)
 	{
 		Vector3 dir = targetPosition - transform.position;
 		if ( Vector3.SqrMagnitude(dir) > _stoppingDistanceSqr )  
@@ -303,19 +317,19 @@ public class Dude : MonoBehaviour
 			_journeyLength = Vector3.Magnitude(dir);
 			_startingPosition = transform.position;
 			_journeyTime = 0.0f;
-			_moving = true;
+			_movingTowardsTarget = true;
 		}
 		else
 		{
-			_moving = false;
+			_movingTowardsTarget = false;
 		}
 	}
 
 	void UpdateMovement()
 	{
-		if( _moving )
+		if( _movingTowardsTarget )
 		{
-			transform.forward = _targetPosition - transform.position;
+
 			_journeyTime += Time.deltaTime;
 			float distanceCovered = _journeyTime * _speed;
 			float fractionCovered = distanceCovered / _journeyLength;
@@ -327,7 +341,7 @@ public class Dude : MonoBehaviour
             }
 			if ( Vector3.SqrMagnitude( transform.position - _targetPosition ) <= _stoppingDistanceSqr )
 			{
-				_moving = false;
+				_movingTowardsTarget = false;
 			}
 		}
 	}
@@ -346,7 +360,7 @@ public class Dude : MonoBehaviour
 
     void RunInCircles()
     {
-        if (!_moving)
+        if (!_movingTowardsTarget)
         {
             _runRouteDirection += 1;
             if (_runRouteDirection == _runRoute.Length)
@@ -354,17 +368,17 @@ public class Dude : MonoBehaviour
                 _runRouteDirection = 0;
             }
             Vector3 target = transform.position + _runRoute[_runRouteDirection];
-            MoveTowards(target);
+            MoveTowardsTarget(target);
         }
     }
 
     void MoveTowardsPlayer()
     {
-        if (!_moving)
+        if (!_movingTowardsTarget)
         {
 			if (Dude.player != null)
 			{
-            	MoveTowards(Dude.player.transform.position);
+            	MoveTowardsTarget(Dude.player.transform.position);
 			}
         }
     }
@@ -390,7 +404,7 @@ public class Dude : MonoBehaviour
     // swarming
     void SwarmToFaction()
     {
-        if (!_moving)
+        if (!_movingTowardsTarget)
         {
             // basically just swarming to the closes faction
             Vector3 closestAllyPosition = Vector3.zero;
@@ -409,7 +423,7 @@ public class Dude : MonoBehaviour
             }
             if (closestAllyPosition != Vector3.zero)
             {
-                MoveTowards(closestAllyPosition);
+                MoveTowardsTarget(closestAllyPosition);
             }
             else
             {
@@ -435,9 +449,10 @@ public class Dude : MonoBehaviour
         if (this.isPlayer)
         {
             Dude.player = null;
-            if (playerDies != null) { 
-                playerDies(); 
-            }
+            if ( playerDies != null )
+			{
+				playerDies();
+			}
         }
         if (dudeDies != null) {
             dudeDies(this);
@@ -457,6 +472,38 @@ public class Dude : MonoBehaviour
                                      Random.Range(-jitterMagnitude, jitterMagnitude));
         transform.position += jitter;
     }
+
+    void MouseUpdate()
+    {
+		if ( isPlayer )
+		{
+			Plane plane = new Plane(Vector3.up, transform.position);
+	        // On PC, the cursor point is the mouse position
+	        Vector3 cursorScreenPosition = Input.mousePosition;
+	        
+	        // Find out where the mouse ray intersects with the movement plane of the player
+	        Vector3 cursorWorldPosition = InputHandler.ScreenPointToWorldPointOnPlane (cursorScreenPosition, plane, Camera.main);
+			cursorWorldPosition.y = transform.position.y;
+	        Vector3 facingDirection = (cursorWorldPosition - transform.position);
+			transform.forward = facingDirection;
+		}
+
+//        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+//        
+//        float ent = 100.0f;
+//        if (plane.Raycast(ray, out ent))
+//        {
+//            Vector3 hitPoint = ray.GetPoint(ent);
+//            
+//            Debug.DrawRay (ray.origin, ray.direction * ent, Color.green);
+//        }
+//        else
+//        {
+//            Debug.DrawRay (ray.origin, ray.direction * 10, Color.red);
+//        }
+//        
+    }
+
 
 
 }

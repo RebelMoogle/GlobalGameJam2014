@@ -8,18 +8,20 @@ public class InputHandler : MonoBehaviour {
 	public delegate void EventHandler();
 	public delegate void KillEventHandler(GameObject e);
 	public delegate void DirectionEventHandler(Vector3 direction);
+	public delegate void FacingEventHandler(float angle);
 
 	public event EventHandler MoveLeft;
 	public event EventHandler MoveRight;
 	public event EventHandler MoveUp;
 	public event EventHandler MoveDown;
 	public event DirectionEventHandler MoveDirection;
+	public event FacingEventHandler FacingDirection;
 	public event EventHandler NoMove;
 	public event KillEventHandler KillAction;
 
 	bool isMoving = false;
 
-	// Use this for initialization
+		// Use this for initialization
 	void Start () 
 	{
 	
@@ -28,41 +30,65 @@ public class InputHandler : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
 	{
-		bool inputRecieved = false;
+		bool dirInputRecieved = false;
 		Vector3 direction = Vector3.zero;
 
 		float axisVal = Input.GetAxis("Horizontal");
-		if( axisVal <= -0.1 || Input.GetKeyDown(KeyCode.A) )
+		if( axisVal <= -0.2 || Input.GetKeyDown(KeyCode.A) )
 		{
-			inputRecieved = true;
+			dirInputRecieved = true;
 			direction.x += -1.0f;
 		}
-		else if ( axisVal >= 0.1 || Input.GetKeyDown(KeyCode.D) )
+		else if ( axisVal >= 0.2 || Input.GetKeyDown(KeyCode.D) )
 		{
-			inputRecieved = true;
+			dirInputRecieved = true;
 			direction.x += 1.0f;
 		}
 
 		axisVal = Input.GetAxis("Vertical");
 
-		if( axisVal <= -0.1 || Input.GetKeyDown(KeyCode.S) )
+		if( axisVal <= -0.2 || Input.GetKeyDown(KeyCode.S) )
 		{
-			inputRecieved = true;
+			dirInputRecieved = true;
 			direction.z += -1.0f;
 		}
-		else if( axisVal >= 0.1 || Input.GetKeyDown(KeyCode.W) )
+		else if( axisVal >= 0.2 || Input.GetKeyDown(KeyCode.W) )
 		{
-			inputRecieved = true;
+			dirInputRecieved = true;
 			direction.z += 1.0f;
 		}
 
+		// Now check the second axis for the facing!
+		bool facingInputRecieved = false;
+		Vector3 facingDirection = Vector3.zero;
 
+		float xAxis = Input.GetAxis("Horizontal2");
+		float yAxis = Input.GetAxis("Vertical2");
 
+		// Determine the angle of the thumbstick
+		if( xAxis <= -0.2 || xAxis > 0.2f ) 
+	    {
+			facingInputRecieved = true;
+		}
+		else
+		{
+			xAxis = 0.0f;
+		}
+
+		if( yAxis <= -0.2 || yAxis > 0.2f ) 
+		{
+			facingInputRecieved = true;
+		}
+		else
+		{
+			yAxis = 0.0f;
+		}
+		
 
 		if(Input.GetButtonDown("KillAction"))
 			OnKillAction();
 
-		if ( inputRecieved )
+		if ( dirInputRecieved )
 		{
 			OnMoveDirection(direction);
 		}
@@ -70,7 +96,18 @@ public class InputHandler : MonoBehaviour {
 		{
 			OnNoMove();
 		}
+
+		if ( facingInputRecieved )
+		{
+			// Calculate the angle of the thumbstick
+			float angle = Mathf.Atan2(xAxis, yAxis) * Mathf.Rad2Deg;
+			OnFacingDirection(angle);
+		}
+
+		//MouseUpdate();
 	}
+
+	
 
 	void OnMoveLeft ()
 	{
@@ -96,11 +133,18 @@ public class InputHandler : MonoBehaviour {
 			MoveUp();
 	}
 
+	void OnFacingDirection ( float angle )
+	{
+		if(FacingDirection != null)
+			FacingDirection( angle );
+	}
+
 	void OnMoveDirection (Vector3 direction)
 	{
 		if(MoveDirection != null)
 			MoveDirection(direction);
 	}
+
 
 	void OnNoMove ()
 	{
@@ -112,5 +156,29 @@ public class InputHandler : MonoBehaviour {
 	{
 		if(KillAction != null)
 			KillAction(this.gameObject);
+	}
+
+	public static Vector3 PlaneRayIntersection (Plane plane, Ray ray)
+	{
+		float dist;
+		if (plane.Raycast(ray, out dist))
+		{
+			Debug.DrawRay (ray.origin, ray.direction * dist, Color.green);
+			return ray.GetPoint (dist);
+		}
+		else
+		{
+			return Vector3.zero;
+
+		}
+	}
+	
+	public static Vector3 ScreenPointToWorldPointOnPlane (Vector3 screenPoint, Plane plane, Camera camera)
+	{
+		// Set up a ray corresponding to the screen position
+		Ray ray  = camera.ScreenPointToRay (screenPoint);
+		
+		// Find out where the ray intersects with the plane
+		return PlaneRayIntersection (plane, ray);
 	}
 }
