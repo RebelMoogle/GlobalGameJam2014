@@ -49,6 +49,7 @@ public class Weapon : MonoBehaviour {
 			ParticleSystem particleClone;
 			particleClone = (ParticleSystem)Instantiate(swooshParticles, transform.position, transform.rotation);
 			particleClone.transform.parent = transform;
+			Destroy(particleClone.gameObject, particleClone.duration);
 		}
 
 
