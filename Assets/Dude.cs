@@ -231,7 +231,7 @@ void Start ()
                                 {
                                     if (playerKilledEnemy != null) { playerKilledEnemy(dude); }
                                 }
-								if ( myFaction != dudeFaction )
+								if ( myFaction != dudeFaction && (dude != Dude.player || !AILibs.factionLikesPlayer(myFaction)))
 								{
 									dude.OnReceivedAttack();
 								}

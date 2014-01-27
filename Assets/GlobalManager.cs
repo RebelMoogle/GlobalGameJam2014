@@ -28,6 +28,10 @@ public class GlobalManager : MonoBehaviour {
             Dude.playerKilledEnemy += (dude) =>
             {
                 factionOpinion[FactionType.VIKING] += 0.2f;
+                if (AILibs.getFactionType(dude) == FactionType.ROMAN)
+                {
+                    factionOpinion[FactionType.ROMAN] -= 0.5f;
+                }
             };
             // initialize opinions
             factionOpinion[FactionType.ROMAN] = 1; 
