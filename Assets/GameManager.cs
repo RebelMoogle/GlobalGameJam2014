@@ -104,12 +104,26 @@ public class GameManager : MonoBehaviour {
             LevelOver.kills = PlayerStats.kills;
             if (nextLevel == null || nextLevel.Equals("") || !LevelOver.won)
             {
-                Application.LoadLevel("Ending");
+				StartCoroutine("LoadEnding");
+                //Application.LoadLevel("Ending");
             }
             else
             {
-                Application.LoadLevel("LevelOver");
+				StartCoroutine("LoadLevelOver");
+               
             }
         }
+	}
+
+	IEnumerator LoadEnding()
+	{
+		yield return new WaitForSeconds(3);
+		Application.LoadLevel("Ending");
+	}
+
+	IEnumerator LoadLevelOver()
+	{
+		yield return new WaitForSeconds(3);
+		Application.LoadLevel("LevelOver");
 	}
 }
