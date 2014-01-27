@@ -37,6 +37,7 @@ public class Ending : MonoBehaviour {
 	void Start () {
         var textMesh = this.GetComponent<TextMesh>();
         textMesh.text += createEndingString();
+        GlobalManager._isInstatiated = false;
 	}
 	
 	// Update is called once per frame

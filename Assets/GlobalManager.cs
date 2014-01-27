@@ -17,7 +17,6 @@ public class GlobalManager : MonoBehaviour {
 
     void Awake()
     {
-        DontDestroyOnLoad(this.gameObject);
         instantiate();
     }
 
