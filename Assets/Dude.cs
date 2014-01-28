@@ -227,12 +227,7 @@ void Start ()
 							{
 								FactionType myFaction = AILibs.getFactionType(this);
 								FactionType dudeFaction = AILibs.getFactionType(dude);
-								Debug.Log(myFaction);
-								Debug.Log(AILibs.factionLikesPlayer(myFaction));
-								Debug.Log(dudeFaction);
-								Debug.Log(AILibs.factionLikesPlayer(dudeFaction));
-								Debug.Log(factionsAreAmicable(myFaction, dudeFaction));
-								if (!factionsAreAmicable(myFaction, dudeFaction)) {
+								if (!factionsAreAmicable(myFaction, dudeFaction) || this.isPlayer) {
 									dude.OnReceivedAttack();
 									if (this == Dude.player)
 									{
@@ -652,7 +647,7 @@ void Start ()
         // jitter
         Vector3 jitter = new Vector3(Random.Range(-jitterMagnitude, jitterMagnitude), 0,
                                      Random.Range(-jitterMagnitude, jitterMagnitude));
-        transform.position += jitter;
+        //transform.position += jitter;
     }
 
     void MouseUpdate()

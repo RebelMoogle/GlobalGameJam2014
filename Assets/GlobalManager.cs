@@ -33,7 +33,9 @@ public class GlobalManager : MonoBehaviour {
                 if (AILibs.getFactionType(dude) == FactionType.ROMAN)
                 {
                     factionOpinion[FactionType.ROMAN] -= 0.5f;
-                }
+                } else if (AILibs.getFactionType(dude) == FactionType.ROBIN) {
+					factionOpinion[FactionType.ROBIN] -= 0.2f;
+				}
             };
             // initialize opinions
             factionOpinion[FactionType.ROMAN] = 1; 

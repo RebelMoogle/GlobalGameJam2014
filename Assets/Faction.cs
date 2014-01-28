@@ -63,7 +63,7 @@ public class Faction : MonoBehaviour {
 		currentType = newFaction;
         if(newFaction == FactionType.ROMAN)
 		{
-            dude.detectEnemyRange = 2f;
+            dude.detectEnemyRange = 4f;
             dude.detectPlayerRange = 3f;
             dude.playerInfluenceFactor = romanPlayerInfluence;
 			if(currentClone != null)
@@ -100,8 +100,8 @@ public class Faction : MonoBehaviour {
         }
         else if (newFaction == FactionType.ROBIN)
         {
-            dude.detectEnemyRange = 1f;
-            dude.detectPlayerRange = 2f;
+            dude.detectEnemyRange = 1.5f;
+            dude.detectPlayerRange = 4f;
 			if(currentClone != null)
 				Destroy(currentClone);
 
