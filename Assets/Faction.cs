@@ -100,8 +100,8 @@ public class Faction : MonoBehaviour {
         }
         else if (newFaction == FactionType.ROBIN)
         {
-            dude.detectEnemyRange = 0.5f;
-            dude.detectPlayerRange = 0.5f;
+            dude.detectEnemyRange = 1f;
+            dude.detectPlayerRange = 2f;
 			if(currentClone != null)
 				Destroy(currentClone);
 

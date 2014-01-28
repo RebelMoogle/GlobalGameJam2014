@@ -228,7 +228,9 @@ void Start ()
 								FactionType myFaction = AILibs.getFactionType(this);
 								FactionType dudeFaction = AILibs.getFactionType(dude);
 								Debug.Log(myFaction);
+								Debug.Log(AILibs.factionLikesPlayer(myFaction));
 								Debug.Log(dudeFaction);
+								Debug.Log(AILibs.factionLikesPlayer(dudeFaction));
 								Debug.Log(factionsAreAmicable(myFaction, dudeFaction));
 								if (!factionsAreAmicable(myFaction, dudeFaction)) {
 									dude.OnReceivedAttack();
@@ -252,7 +254,7 @@ void Start ()
 			return !AILibs.factionDislikesPlayer(attackerFaction);
 		} else {
 			// if the factions both like the player, then they are amicable
-			return AILibs.factionLikesPlayer(attackerFaction) && AILibs.factionLikesPlayer(attackeeFaction);
+			return attackerFaction == attackeeFaction || (AILibs.factionLikesPlayer(attackerFaction) && AILibs.factionLikesPlayer(attackeeFaction));
 		}
 	}
 
@@ -552,7 +554,8 @@ void Start ()
         Dude nearestEnemy = null;
         foreach (var dude in allDudes)
         {
-			if (!CompareTag(dude.tag) && !dude.isPlayer)
+			if (!factionsAreAmicable(AILibs.getFactionType(this), AILibs.getFactionType(dude)) && !dude.isPlayer)
+			//if (!CompareTag(dude.tag) && !dude.isPlayer)
             {
                 var distance = Vector3.Distance(transform.position, dude.transform.position);
                 if (distance < maxRange)
