@@ -71,10 +71,14 @@ public class GameManager : MonoBehaviour {
             {
                 foreach (var faction in existingFactions)
                 {
-                    if (faction != FactionType.PLAYER && AILibs.factionLikesPlayer(faction))
+                    if (faction != FactionType.PLAYER && !AILibs.factionDislikesPlayer(faction))
                     {
                         Debug.Log("ONLY ONE FACTION LIVES ENDING");
-                        LevelOver.VictoryType = LevelOver.victoryType.HELPFUL;
+						if (AILibs.factionLikesPlayer(faction)) {
+                        	LevelOver.VictoryType = LevelOver.victoryType.HELPFUL;
+						} else {
+							LevelOver.VictoryType = LevelOver.victoryType.NICEONE;
+						}
                         LevelOver.won = true;
                         gameEnded = true;
                     }

@@ -11,13 +11,14 @@ public class LevelOver : MonoBehaviour {
         OPPORTUNIST,
         PASSIVE,
         HELPFUL,
+		NICEONE,
         NICE
     };
 
     public static int kills = 0;
     public static string gameOverDetails = null;
     public static bool won = false;
-    public static victoryType VictoryType = victoryType.PASSIVE;
+    public static victoryType VictoryType = victoryType.NICEONE;
 
 	// Use this for initialization
 	void Start () {
@@ -46,20 +47,24 @@ public class LevelOver : MonoBehaviour {
             switch (VictoryType)
             {
                 case victoryType.AGGRESSIVE:
-                    detailString = "You annihilated all enemies who stand in your way.";
+                    detailString = "You annihilated all \nenemies who stand \nin your way.";
                     break;
                 case victoryType.OPPORTUNIST:
-                    detailString = "You bided your time and striked when the time is right.";
+                    detailString = "You bided your time and \nstriked when the time \nis right.";
                     break;
                 case victoryType.PASSIVE:
-                    detailString = "You let the fools destroy themselves.";
+                    detailString = "You let the fools destroy \nthemselves.";
                     break;
                 case victoryType.HELPFUL:
                     detailString = "You sided with the strong.";
                     break;
                 case victoryType.NICE:
-                    detailString = "You promoted peace between the factions.";
+                    detailString = "You promoted peace \nbetween the remaining \nfactions.";
                     break;
+				case victoryType.NICEONE:
+					detailString = "You made peace with the \nremaining faction.";
+					break;
+
             }
             levelOverString += detailString + "\n";
         }
