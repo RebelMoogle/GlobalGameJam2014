@@ -26,7 +26,10 @@ public class GlobalManager : MonoBehaviour {
         {
             Dude.playerKilledEnemy += (dude) =>
             {
-                factionOpinion[FactionType.VIKING] += 0.2f;
+				var factionType = AILibs.getFactionType(dude);
+				if (factionType != FactionType.VIKING) {
+					factionOpinion[FactionType.VIKING] += 0.2f;
+				}
                 if (AILibs.getFactionType(dude) == FactionType.ROMAN)
                 {
                     factionOpinion[FactionType.ROMAN] -= 0.5f;
