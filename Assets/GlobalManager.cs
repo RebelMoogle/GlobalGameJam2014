@@ -29,6 +29,9 @@ public class GlobalManager : MonoBehaviour {
 				var factionType = AILibs.getFactionType(dude);
 				if (factionType != FactionType.VIKING) {
 					factionOpinion[FactionType.VIKING] += 0.2f;
+					if (factionType == FactionType.ROBIN) {
+						factionOpinion[FactionType.VIKING] += 0.3f;
+					}
 				}
                 if (AILibs.getFactionType(dude) == FactionType.ROMAN)
                 {

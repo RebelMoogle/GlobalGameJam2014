@@ -7,7 +7,7 @@ public class AIRobin {
     public static void OnDeath(Dude dude)
     {
 		if (!AILibs.factionLikesPlayer(FactionType.ROBIN)) {
-			GlobalManager.modifyOpinion (FactionType.ROBIN, -0.05f);
+			//GlobalManager.modifyOpinion (FactionType.ROBIN, -0.05f);
 		}
     }
 
